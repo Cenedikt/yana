@@ -22,14 +22,14 @@ Unittest test:
 make clean install test
 ```
 
-Check for yana in github.com/{group}. If your project is not set please add it:
+Check for yana in github.com/Cenedikt. If your project is not set please add it:
 
-Create a new project on github.com/{group}/yana
+Create a new project on github.com/Cenedikt/yana
 Then populate it:
 
 ```bash
-##   e.g. if group is "{group}" and project_name is "yana"
-git remote add origin git@github.com:{group}/yana.git
+##   e.g. if group is "Cenedikt" and project_name is "yana"
+git remote add origin git@github.com:Cenedikt/yana.git
 git push -u origin master
 git push -u origin --tags
 ```
@@ -45,7 +45,7 @@ yana-run
 
 # Install
 
-Go to `https://github.com/{group}/yana` to see the project, manage issues,
+Go to `https://github.com/Cenedikt/yana` to see the project, manage issues,
 setup you ssh public key, ...
 
 Create a python3 virtualenv and activate it:
@@ -58,7 +58,7 @@ deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
 Clone the project and install it:
 
 ```bash
-git clone git@github.com:{group}/yana.git
+git clone git@github.com:Cenedikt/yana.git
 cd yana
 pip install -r requirements.txt
 make clean install test                # install and test
