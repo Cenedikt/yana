@@ -20,8 +20,6 @@ deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
 Crating virtualenv with pyenv
 ```bash
 pyenv install 3.11.3
-pyenv virtualenv 3.11.3 yana-env
-pyenv local yana-env
 ```
 
 Unittest test:
@@ -52,12 +50,8 @@ yana-run
 
 # Install
 
-<<<<<<< HEAD
 Go to `https://github.com/Ceneidikt/yana` to see the project, manage issues,
-=======
-Go to `https://github.com/Cenedikt/yana` to see the project, manage issues,
->>>>>>> 0c2a2f6a71afcf1376ba45adfbdec1435a8aa110
-setup you ssh public key, ...
+
 
 Create a python3 virtualenv and activate it:
 
