@@ -16,6 +16,11 @@ sudo apt-get install virtualenv python-pip python-dev
 deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
     pip install pip -U; pip install -r requirements.txt
 ```
+```bash
+pyenv install 3.11.3
+pyenv virtualenv 3.11.3 yana-env
+pyenv local yana-env
+```
 
 Unittest test:
 ```bash
@@ -45,7 +50,7 @@ yana-run
 
 # Install
 
-Go to `https://github.com/{group}/yana` to see the project, manage issues,
+Go to `https://github.com/Ceneidikt/yana` to see the project, manage issues,
 setup you ssh public key, ...
 
 Create a python3 virtualenv and activate it:
@@ -58,7 +63,7 @@ deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
 Clone the project and install it:
 
 ```bash
-git clone git@github.com:{group}/yana.git
+git clone git@github.com:Cenedikt/yana.git
 cd yana
 pip install -r requirements.txt
 make clean install test                # install and test
