@@ -16,6 +16,8 @@ sudo apt-get install virtualenv python-pip python-dev
 deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
     pip install pip -U; pip install -r requirements.txt
 ```
+
+Crating virtualenv with pyenv
 ```bash
 pyenv install 3.11.3
 pyenv virtualenv 3.11.3 yana-env
