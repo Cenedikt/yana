@@ -7,17 +7,18 @@ WORKDIR /app
 RUN pip install --upgrade pip
 
 # Copy the current directory contents into the container at /app
+COPY requirements.txt /yana/api/requirements.txt
 COPY requirements.txt requirements.txt
+COPY setup.py setup.py
+COPY yana/ ./yana/
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
-COPY setup.py setup.py
-
 RUN pip install .
 
 # Make port 80 available to the world outside this container
-EXPOSE 80
+EXPOSE 8000
 
 # Run app.py when the container launches
-CMD uvicorn yana.api.api:app  --host 0.0.0.0  --port 80
+CMD uvicorn yana.api.api:app  --host 0.0.0.0  --port 8000
