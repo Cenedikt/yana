@@ -11,37 +11,39 @@ class Model1_1():
     best = 'sentence-transformers/all-mpnet-base-v2'
 
     # Model initialization
-    def __init__(self, model = best) -> None:
+    def __init__(self, model = fast) -> None:
         self.model = SentenceTransformer(model)
         return None
 
-    # Method that embeds new text (either document corpus or queries) into the multidimensional vector space
-
-    def embed(self,data:pd.DataFrame|list|str, save = False):
+    # EMBED
+    def embed(self,data:pd.Series|list|str, save = False):
         '''Method that embeds new text (either document corpus or queries) into the multidimensional vector space
 
         Args:
-            - data: data to be embedded
-            - save'''
+            - data: data to be embedded as pd.Series of strings, list of strings, or string
+            - save: True if you want to save the embeddings tensor as .pt (default False)'''
         embedded =  self.model.encode(data,show_progress_bar=True,convert_to_tensor=True)
         print('Your input has been embedded successfully!')
+
+        if save == True:
+            torch.save(embedded,'../yana/data/embedding.pt')
+            print('Embedding saved as yana/yana/data/embedding.pt')
         return embedded
 
-    # Our MAIN search method
+    # SEARCH
     def search(self, query:str, corpus_embeddings = None, results:int = 3):
         '''This is our main search method. Takes query, returns closest matches.
 
         Args:
             - query: user input as string
-            - embedded_corpus: the vector embeddings of the corpus of text we want to search from as pytorch tensor
+            - corpus_embeddings: the vector embeddings of the corpus of text we want to search from as pytorch tensor
             - results: the number of matches to return (integer, default is 3)'''
 
         search_results = []
 
         if corpus_embeddings is None:
-            with open('../yana/data/kaggle_embeddings.csv', 'r') as file:
-                data = pd.read_csv(file)
-                corpus_embeddings = torch.tensor(data.drop(columns=['Unnamed: 0']).values)
+            data = '../yana/data/embedding.pt'
+            corpus_embeddings = torch.load(data)
 
         query_embeddings = Model1_1.embed(self,query)
         pred = semantic_search(query_embeddings=query_embeddings, corpus_embeddings=corpus_embeddings,top_k=results)
