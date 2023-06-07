@@ -12,18 +12,25 @@ class Model1_1():
 
     # Model initialization
     def __init__(self, model = best) -> None:
-        self = SentenceTransformer(model)
+        self.model = SentenceTransformer(model)
         return None
 
     # Method that embeds new text (either document corpus or queries) into the multidimensional vector space
-    def embed(self,data:pd.DataFrame|list|str):
-        embedded =  self.encode(data,show_progress_bar=True,convert_to_tensor=True)
+
+    def embed(self,data:pd.DataFrame|list|str, save = False):
+        '''Method that embeds new text (either document corpus or queries) into the multidimensional vector space
+
+        Args:
+            - data: data to be embedded
+            - save'''
+        embedded =  self.model.encode(data,show_progress_bar=True,convert_to_tensor=True)
         print('Your input has been embedded successfully!')
         return embedded
 
     # Our MAIN search method
     def search(self, query:str, corpus_embeddings = None, results:int = 3):
         '''This is our main search method. Takes query, returns closest matches.
+
         Args:
             - query: user input as string
             - embedded_corpus: the vector embeddings of the corpus of text we want to search from as pytorch tensor
@@ -34,7 +41,7 @@ class Model1_1():
         if corpus_embeddings is None:
             with open('../yana/data/kaggle_embeddings.csv', 'r') as file:
                 data = pd.read_csv(file)
-                corpus_embeddings = torch.tensor(data.values)
+                corpus_embeddings = torch.tensor(data.drop(columns=['Unnamed: 0']).values)
 
         query_embeddings = Model1_1.embed(self,query)
         pred = semantic_search(query_embeddings=query_embeddings, corpus_embeddings=corpus_embeddings,top_k=results)
