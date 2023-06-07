@@ -13,5 +13,5 @@ setup(name='yana',
       test_suite='tests',
       # include_package_data: to install data from MANIFEST.in
       include_package_data=True,
-      scripts=['scripts/yana-run'],
+      #scripts=['scripts/yana-run'],
       zip_safe=False)
