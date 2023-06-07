@@ -27,9 +27,7 @@ def read_root():
 @app.get("/docker_test")
 def docker_test():
 
-    # This function will be called when a GET request is made to "/predict"
-    # The 'query' parameter is automatically populated from the query parameters of the request
-    # For now, it simply returns the input as output
+    # This is a Test for Docker
     return {
         "This is": "docker",
         }
