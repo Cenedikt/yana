@@ -18,7 +18,7 @@ RUN pip install -r requirements.txt
 RUN pip install .
 
 # Make port 80 available to the world outside this container
-EXPOSE 8000
+EXPOSE 8890
 
 # Run app.py when the container launches
-CMD uvicorn yana.api.api:app  --host 0.0.0.0  --port 8000
+CMD uvicorn yana.api.api:app  --host 0.0.0.0 --port 8890
