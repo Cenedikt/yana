@@ -31,6 +31,10 @@ joblib
 memoized-property
 termcolor
 
+# models
+sentence-transformers
+
 # Others
 time
 base64
+
