@@ -1,9 +1,9 @@
-from yana.api import api
+from yana.api import api_new_not_working
 
 #testing requests
 
 def test_read_root():
-    output = api.read_root()
+    output = api_new_not_working.read_root()
     assert output == {"Welcome to": "YANA"}
 
 # def test_predict():
