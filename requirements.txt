@@ -21,6 +21,9 @@ gcsfs
 google-cloud-storage
 mlflow
 s3fs
+fastapi
+uvicorn
+httpx
 
 # utilities
 six>=1.14
@@ -30,3 +33,8 @@ termcolor
 
 # models
 sentence-transformers
+
+# Others
+time
+base64
+
