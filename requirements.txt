@@ -7,7 +7,6 @@ wheel>=0.29
 # data science
 numpy
 pandas
-scikit-learn
 
 # tests/linter
 black
@@ -31,6 +30,10 @@ joblib
 memoized-property
 termcolor
 
+# Model
+sentence-transformers #--upgrade
+
 # Others
-time
-base64
+streamlit
+#base64
+#time
