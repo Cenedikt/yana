@@ -7,34 +7,33 @@ wheel>=0.29
 # data science
 numpy
 pandas
-# scikit-learn
 
 # tests/linter
-# black
-# coverage
-# flake8
+black
+coverage
+flake8
 pytest
-# yapf
+yapf
 
 # API
 gcsfs
-# google-cloud-storage
-# mlflow
-# s3fs
+google-cloud-storage
+mlflow
+s3fs
 fastapi
 uvicorn
-# httpx
+httpx
 
 # utilities
 six>=1.14
-# joblib
-# memoized-property
-# termcolor
+joblib
+memoized-property
+termcolor
 
 # Model
 sentence-transformers #--upgrade
 
 # Others
 streamlit
-#time
 #base64
+#time
