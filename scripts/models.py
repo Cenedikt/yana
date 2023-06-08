@@ -26,7 +26,7 @@ class Model1_1():
         print('Your input has been embedded successfully!')
 
         if save == True:
-            torch.save(embedded,'../yana/data/embedding.pt')
+            torch.save(embedded,'../yana/data/embedding.pt') #USE ABSOLUTE PATHS, get using python methods (os.path.join)
             print('Embedding saved as yana/yana/data/embedding.pt')
         return embedded
 
