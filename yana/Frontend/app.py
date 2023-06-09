@@ -89,23 +89,27 @@ def main():
         if st.button("Submit"):
             url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
             headers = {'Content-Type': 'application/json'}
-            data = {"text": query}
-            json_data = json.dumps(data)
 
-            response = requests.post(url, headers=headers, data=json_data)
+            url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
 
-            if response.status_code == 200:
-                results = response.json()
-                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
-                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown("<div class='results-box'><h3>According to our model, the following posts are similar to your query:</h3></div>", unsafe_allow_html=True)
-                results_html = ""
-                for result in results['text']:
-                    results_html += "<div class='result-item'>• " + result + "</div>"
+    # if mode == "Query":
+    #     query = st.text_input("Enter your query:")
+    #     if st.button("Submit"):
+    #         headers = {'Content-Type': 'application/json'}
+    #         # url = "http://127.0.0.1:8000/query/"
+    #         url = "http://0.0.0.0:8890/query/"
+    #         data = {"text": query}
+    #         json_data = json.dumps(data)
 
-                    st.markdown(results_html, unsafe_allow_html=True)
-            else:
-                st.error("There was an error processing your query.")
+    #         response = requests.post(url, headers=headers, data=json_data)
+
+    #         if response.status_code == 200:
+    #             results = response.json()
+    #             st.write("Results:")
+    #             for result in results['text']:
+    #                 st.write(result)
+    #         else:
+    #             st.error("There was an error processing your query.")
 
     elif mode == "Fetch Similar Posts":
         similar_query = st.text_input("Enter your query:")
