@@ -1,8 +1,10 @@
+
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from pydantic import BaseModel, Field
 from typing import Dict, List
 import torch
 from scripts.models import Model1_1
+
 
 
 app = FastAPI()
@@ -14,6 +16,7 @@ class Query(BaseModel):
 class Response(BaseModel):
     """Data model for the responses."""
     text: List[str]
+
 
 model = Model1_1()
 
@@ -30,6 +33,7 @@ def predict(user_query: str):
 
 @app.post("/query/")
 async def create_query(background_tasks: BackgroundTasks, query: Query):
+
     """
     Processes the user's query and generates a prediction for it.
     The query and the prediction are stored.
@@ -38,6 +42,7 @@ async def create_query(background_tasks: BackgroundTasks, query: Query):
 
     # Add prediction task to background
     background_tasks.add_task(predict, user_query)
+
 
     return {"message": "Your query has been received and is being processed. Please use the '/result' endpoint with your query text to get the results."}
 

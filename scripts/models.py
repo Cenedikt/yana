@@ -42,6 +42,7 @@ class Model1_1():
         search_results = []
 
         if corpus_embeddings is None:
+
             data = 'yana/data/embedding.pt'
             corpus_embeddings = torch.load(data)
 
