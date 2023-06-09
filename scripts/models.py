@@ -45,6 +45,7 @@ class Model1_1():
 
         if corpus_embeddings is None:
             data = '../yana/data/embedding.pt'
+
             corpus_embeddings = torch.load(data)
 
         query_embeddings = Model1_1.embed(self,query)
@@ -53,7 +54,7 @@ class Model1_1():
         print(f'Your query was: {query}')
         print('\nHere are your closest matches:\n')
 
-        with open('../yana/data/depression_dataset_reddit_cleaned.csv', 'r') as file:
+        with open('yana/data/depression_dataset_reddit_cleaned.csv', 'r') as file:
             data = pd.read_csv(file)
             posts = data['clean_text'].astype('string')
 
