@@ -1,11 +1,10 @@
 import streamlit as st
 from PIL import Image
-
+import requests
+from yana.api.api import get_result, create_query
 import time
-
-import numpy as np
-import streamlit as st
 import base64
+from scripts.models import Model1_1
 
 
 # Function to convert a binary file to base64 encoding
@@ -46,6 +45,9 @@ def set_background(png_file):
 
     st.markdown(page_bg_img, unsafe_allow_html=True) # Apply the background image using Streamlit's markdown feature
 
+# URL of the FastAPI service
+API_URL = 'http://127.0.0.1:8000'  # replace with your actual URL
+
 img = Image.open('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_logo_image.png')
 
 st.set_page_config(page_title='YANA', page_icon=img) # Setting the page title and icon
@@ -54,39 +56,38 @@ def main():
     set_background('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
 
     st.markdown(
-    """
-    <h1 style='text-align: center;'>YANA: You are not alone</h1>
-    """,
-    unsafe_allow_html=True
-) # Display a header1
-    st.markdown(
-    """
-    <h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3>
-    <p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape. Together, we can navigate the complexities of mental health and improve well-being.</p>
-    """,
-    unsafe_allow_html=True
-)
+    """<h1 style='text-align: center;'>YANA: You are not alone</h1>
+    """,unsafe_allow_html=True) # Header 1
+    st.markdown("""<h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3>
+    <p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p>
+    """,unsafe_allow_html=True) # Description
     st.markdown("<h4 class='big-text'>Mode:</h4>", unsafe_allow_html=True) # Display a header2
     mode = st.radio("", ["Query", "Fetch Similar Posts"]) # Radio button to select the mode
 
     if mode == "Query":
-        query = st.text_input("Enter your query:") # Get the user's query
-        if st.button("Submit"): # If the submit button is pressed
-            # Add your logic here to generate the result based on the query
+        query = st.text_input("Enter your query:")
+        if st.button("Submit"):
+            # POST the query to the API
+            response = get_result(query)
 
-            # Display a loading spinner
-            with st.spinner("Generating results..."):
-                # Simulate a delay to show the loading animation
-                time.sleep(3)
-
-                # Generate the result
-                result = {"query": query}
+            if response == 200:
+                # Display a loading spinner
+                with st.spinner("Generating results..."):
+                    # Continuously poll the GET endpoint until results are available
+                    while True:
+                        result_response = requests.get(API_URL,params=query)
+                        if result_response == 200:
+                            results = result_response.json
+                            break
+                        time.sleep(1)  # Wait for 1 second before polling again
 
                 # Clear the loading spinner
                 st.spinner()
+                # Display the results
+                st.write("Results:")
+                for result in results:
+                    st.write(result)
 
-                # Display the result
-                st.json(result)
     elif mode == "Fetch Similar Posts":
         similar_query = st.text_input("Enter your query:") # Get the user's query for similar posts
         if st.button("Submit"): # If the fetch button is pressed
@@ -97,13 +98,13 @@ def main():
                 # Simulate a delay to show the loading animation
                 time.sleep(3)
 
-                # Generate the result
+                # dummy result - TODO: replace with proper FUNCTION CALL
                 similar_posts = ["Example Post 1", "Example Post 2", "Example Post 3"]  # Example data, replace with your logic
 
                 # Clear the loading spinner
                 st.spinner()
 
-                # Display the similar posts
+                # Dummy result diplay - TODO: replace with proper FUNCTION CALL
                 st.write("Similar Posts:")
                 for post in similar_posts:
                     st.write(post)
