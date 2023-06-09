@@ -10,7 +10,8 @@ RUN pip install --upgrade pip
 COPY requirements.txt /yana/api/requirements.txt
 COPY requirements.txt requirements.txt
 COPY setup.py setup.py
-COPY yana/ ./yana/
+COPY yana/ yana/
+COPY scripts/ scripts/
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
