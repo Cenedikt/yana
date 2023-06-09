@@ -68,7 +68,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             # POST the query to the API
-            response = get_result(query)
+            response = requests.post(f'{API_URL}/query/{query}')
 
             if response == 200:
                 # Display a loading spinner
@@ -77,7 +77,7 @@ def main():
                     while True:
                         result_response = requests.get(API_URL,params=query)
                         if result_response == 200:
-                            results = result_response.json
+                            results = result_response
                             break
                         time.sleep(1)  # Wait for 1 second before polling again
 
