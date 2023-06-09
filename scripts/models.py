@@ -62,3 +62,10 @@ class Model1_1():
                 print('\n')
 
         return search_results
+
+class Model1_2():
+    '''This class an upgrade from Model1_1 that also performs additional operations on the search results'''
+
+    # Here are the different transformers we can use; for now, we can use fast and best
+    fast = 'sentence-transformers/all-MiniLM-L6-v2'
+    best = 'sentence-transformers/all-mpnet-base-v2'
