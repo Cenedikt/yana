@@ -5,13 +5,11 @@ import time
 import base64
 import json
 
-
 # Function to convert a binary file to base64 encoding
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
-
 
 # Function to set the background image of the Streamlit application
 def set_background(png_file):
@@ -36,30 +34,68 @@ def set_background(png_file):
         font-size: 20px;
         font-weight: bold;
     }
-   ####
+
+    #MainMenu {visibility: hidden; }
+    footer {visibility: hidden;}
+
     </style>
     ''' % bin_str
 
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-img = Image.open('/home/dizziebeatz/code/Cenedikt/yana/yana/Frontend/Content/Yana_logo_image.png')
+
+img = Image.open('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
+
 
 st.set_page_config(page_title='YANA', page_icon=img)
 
 def main():
     set_background('/home/dizziebeatz/code/Cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
 
-    st.markdown("<h1 style='text-align: center;'>YANA: You are not alone</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3><p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p>", unsafe_allow_html=True)
-    st.markdown("<h4 class='big-text'>Mode:</h4>", unsafe_allow_html=True)
+
+    st.markdown('''
+    <style>
+    .title-box {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .description-box {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .results-box {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .result-item {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    </style>
+    ''', unsafe_allow_html=True)
+
+    st.markdown("<div class='title-box'><h1 style='text-align: center;'>YANA: You are not alone</h1></div>", unsafe_allow_html=True)
+    st.markdown("<div class='description-box'><h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3><p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p></div>", unsafe_allow_html=True)
+
+
     mode = st.radio("", ["Query", "Fetch Similar Posts"])
 
     if mode == "Query":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
+
+            url = "http://127.0.0.1:8000/query/"
             headers = {'Content-Type': 'application/json'}
-            # url = "http://127.0.0.1:8000/query/"
-            url = "http://0.0.0.0:8890/query/"
+
             data = {"text": query}
             json_data = json.dumps(data)
 
@@ -67,103 +103,15 @@ def main():
 
             if response.status_code == 200:
                 results = response.json()
-                st.write("Results:")
+
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
+                st.markdown("<div class='results-box'><h3>According to our model, the following posts are similar to your query:</h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
-                    st.write(result)
+                    st.write(f"<div class='result-item'>• {result}</div>", unsafe_allow_html=True)
             else:
                 st.error("There was an error processing your query.")
 
-    # if mode == "Query":
-    #     query = st.text_input("Enter your query:")
-    #     if st.button("Submit"):
-    #         headers = {'Content-Type': 'application/json'}
-    #         url = "http://127.0.0.1:8000/query/"
-    #         data = {"text": query}
-    #         json_data = json.dumps(data)
-
-    #         response = requests.post(url, headers=headers, data=json_data)
-
-    #         if response.status_code == 200:
-    #             with st.spinner("Generating results..."):
-    #                 max_attempts = 30
-    #                 attempts = 0
-    #                 while attempts < max_attempts:
-    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
-    #                     results_response = requests.get(results_url)
-    #                     if results_response.status_code == 200:
-    #                         results = results_response.json()
-    #                         st.spinner()
-    #                         st.write("Results:")
-    #                         for result in results:
-    #                             st.write(result)
-    #                         break
-    #                     elif results_response.status_code == 202:
-    #                         attempts += 1
-    #                         time.sleep(1)
-    #                     else:
-    #                         st.error("There was an error retrieving the results.")
-    #                         break
-    #                 if attempts == max_attempts:
-    #                     st.error("Result retrieval timed out.")
-    #         else:
-    #             st.error("There was an error processing your query.")
-
-    # if mode == "Query":
-    #     query = st.text_input("Enter your query:")
-    #     if st.button("Submit"):
-    #         url = "http://127.0.0.1:8000/query/"
-    #         headers = {'Content-Type': 'application/json'}
-    #         data = {"text": query}
-    #         json_data = json.dumps(data)
-
-    #         response = requests.post(url, headers=headers, data=json_data)
-
-    #         if response.status_code == 200:
-    #             with st.spinner("Generating results..."):
-    #                 max_attempts = 3
-    #                 attempts = 0
-    #                 while attempts < max_attempts:
-    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
-    #                     results_response = requests.get(results_url)
-    #                     if results_response.status_code == 200:
-    #                         results = results_response.json()
-    #                         st.spinner()
-    #                         st.write("Results:")
-    #                         for result in results:
-    #                             st.write(result)
-    #                         break
-    #                     attempts += 1
-    #                     time.sleep(6)
-    #                 if attempts == max_attempts:
-    #                     st.error("Result retrieval timed out.")
-    #         else:
-    #             st.error("There was an error processing your query.")
-
-    # if mode == "Query":
-    #     query = st.text_input("Enter your query:")
-    #     if st.button("Submit"):
-    #         url = "http://127.0.0.1:8000/query/"
-    #         headers = {'Content-Type': 'application/json'}
-    #         data = {"text": query}
-    #         json_data = json.dumps(data)
-
-    #         response = requests.post(url, headers=headers, data=json_data)
-
-    #         if response.status_code == 200:
-    #             with st.spinner("Generating results..."):
-    #                 while True:
-    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
-    #                     results_response = requests.get(results_url)
-    #                     if results_response.status_code == 200:
-    #                         results = results_response.json()
-    #                         st.spinner()
-    #                         st.write("Results:")
-    #                         for result in results:
-    #                             st.write(result)
-    #                         break
-    #                     time.sleep(1)
-    #         else:
-    #             st.error("There was an error processing your query.")
 
     elif mode == "Fetch Similar Posts":
         similar_query = st.text_input("Enter your query:")
@@ -174,9 +122,12 @@ def main():
                 similar_posts = ["Example Post 1", "Example Post 2", "Example Post 3"]
                 st.spinner()
 
-                st.write("Similar Posts:")
+
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
+                st.markdown("<div class='results-box'><h3>Similar Posts:</h3></div>", unsafe_allow_html=True)
+
                 for post in similar_posts:
-                    st.write(post)
+                    st.write(f"<div class='result-item'>{post}</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
