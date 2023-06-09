@@ -58,8 +58,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             headers = {'Content-Type': 'application/json'}
-            # url = "http://127.0.0.1:8000/query/"
-            url = "http://0.0.0.0:8890/query/"
+            url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
             data = {"text": query}
             json_data = json.dumps(data)
 
@@ -77,93 +76,21 @@ def main():
     #     query = st.text_input("Enter your query:")
     #     if st.button("Submit"):
     #         headers = {'Content-Type': 'application/json'}
-    #         url = "http://127.0.0.1:8000/query/"
+    #         # url = "http://127.0.0.1:8000/query/"
+    #         url = "http://0.0.0.0:8890/query/"
     #         data = {"text": query}
     #         json_data = json.dumps(data)
 
     #         response = requests.post(url, headers=headers, data=json_data)
 
     #         if response.status_code == 200:
-    #             with st.spinner("Generating results..."):
-    #                 max_attempts = 30
-    #                 attempts = 0
-    #                 while attempts < max_attempts:
-    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
-    #                     results_response = requests.get(results_url)
-    #                     if results_response.status_code == 200:
-    #                         results = results_response.json()
-    #                         st.spinner()
-    #                         st.write("Results:")
-    #                         for result in results:
-    #                             st.write(result)
-    #                         break
-    #                     elif results_response.status_code == 202:
-    #                         attempts += 1
-    #                         time.sleep(1)
-    #                     else:
-    #                         st.error("There was an error retrieving the results.")
-    #                         break
-    #                 if attempts == max_attempts:
-    #                     st.error("Result retrieval timed out.")
+    #             results = response.json()
+    #             st.write("Results:")
+    #             for result in results['text']:
+    #                 st.write(result)
     #         else:
     #             st.error("There was an error processing your query.")
 
-    # if mode == "Query":
-    #     query = st.text_input("Enter your query:")
-    #     if st.button("Submit"):
-    #         url = "http://127.0.0.1:8000/query/"
-    #         headers = {'Content-Type': 'application/json'}
-    #         data = {"text": query}
-    #         json_data = json.dumps(data)
-
-    #         response = requests.post(url, headers=headers, data=json_data)
-
-    #         if response.status_code == 200:
-    #             with st.spinner("Generating results..."):
-    #                 max_attempts = 3
-    #                 attempts = 0
-    #                 while attempts < max_attempts:
-    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
-    #                     results_response = requests.get(results_url)
-    #                     if results_response.status_code == 200:
-    #                         results = results_response.json()
-    #                         st.spinner()
-    #                         st.write("Results:")
-    #                         for result in results:
-    #                             st.write(result)
-    #                         break
-    #                     attempts += 1
-    #                     time.sleep(6)
-    #                 if attempts == max_attempts:
-    #                     st.error("Result retrieval timed out.")
-    #         else:
-    #             st.error("There was an error processing your query.")
-
-    # if mode == "Query":
-    #     query = st.text_input("Enter your query:")
-    #     if st.button("Submit"):
-    #         url = "http://127.0.0.1:8000/query/"
-    #         headers = {'Content-Type': 'application/json'}
-    #         data = {"text": query}
-    #         json_data = json.dumps(data)
-
-    #         response = requests.post(url, headers=headers, data=json_data)
-
-    #         if response.status_code == 200:
-    #             with st.spinner("Generating results..."):
-    #                 while True:
-    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
-    #                     results_response = requests.get(results_url)
-    #                     if results_response.status_code == 200:
-    #                         results = results_response.json()
-    #                         st.spinner()
-    #                         st.write("Results:")
-    #                         for result in results:
-    #                             st.write(result)
-    #                         break
-    #                     time.sleep(1)
-    #         else:
-    #             st.error("There was an error processing your query.")
 
     elif mode == "Fetch Similar Posts":
         similar_query = st.text_input("Enter your query:")
