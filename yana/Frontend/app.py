@@ -1,11 +1,9 @@
 import streamlit as st
 from PIL import Image
 import requests
-from yana.api.api import get_result, create_query
 import time
 import base64
-from scripts.models import Model1_1
-
+import json
 
 # Function to convert a binary file to base64 encoding
 def get_base64(bin_file):
@@ -13,15 +11,13 @@ def get_base64(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-
 # Function to set the background image of the Streamlit application
 def set_background(png_file):
-    bin_str = get_base64(png_file) # Convert the PNG image file to base64 encoding and setting image as backgrouond.
+    bin_str = get_base64(png_file)
     page_bg_img = '''
     <style>
     .stApp {
     background-image: url("data:image/png;base64,%s");
-    background-size: cover;
     background-size: cover;
     }
     .stTextInput input {
@@ -38,76 +34,88 @@ def set_background(png_file):
         font-size: 20px;
         font-weight: bold;
     }
-    #MainMenu {visibility: hidden; } # Hide Menu
-        footer {visibility: hidden;} # Hide footer
+    #MainMenu {visibility: hidden; }
+    footer {visibility: hidden;}
     </style>
     ''' % bin_str
 
-    st.markdown(page_bg_img, unsafe_allow_html=True) # Apply the background image using Streamlit's markdown feature
+    st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# URL of the FastAPI service
-API_URL = 'http://127.0.0.1:8000'  # replace with your actual URL
+img = Image.open('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
 
-img = Image.open('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_logo_image.png')
-
-st.set_page_config(page_title='YANA', page_icon=img) # Setting the page title and icon
+st.set_page_config(page_title='YANA', page_icon=img)
 
 def main():
     set_background('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
 
-    st.markdown(
-    """<h1 style='text-align: center;'>YANA: You are not alone</h1>
-    """,unsafe_allow_html=True) # Header 1
-    st.markdown("""<h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3>
-    <p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p>
-    """,unsafe_allow_html=True) # Description
-    st.markdown("<h4 class='big-text'>Mode:</h4>", unsafe_allow_html=True) # Display a header2
-    mode = st.radio("", ["Query", "Fetch Similar Posts"]) # Radio button to select the mode
+    st.markdown('''
+    <style>
+    .title-box {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .description-box {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .results-box {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    .result-item {
+        background-color: rgba(242, 242, 242, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    </style>
+    ''', unsafe_allow_html=True)
+
+    st.markdown("<div class='title-box'><h1 style='text-align: center;'>YANA: You are not alone</h1></div>", unsafe_allow_html=True)
+    st.markdown("<div class='description-box'><h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3><p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p></div>", unsafe_allow_html=True)
+
+    mode = st.radio("", ["Query", "Fetch Similar Posts"])
 
     if mode == "Query":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            # POST the query to the API
-            response = requests.post(f'{API_URL}/query/{query}')
+            url = "http://127.0.0.1:8000/query/"
+            headers = {'Content-Type': 'application/json'}
+            data = {"text": query}
+            json_data = json.dumps(data)
 
-            if response == 200:
-                # Display a loading spinner
-                with st.spinner("Generating results..."):
-                    # Continuously poll the GET endpoint until results are available
-                    while True:
-                        result_response = requests.get(API_URL,params=query)
-                        if result_response == 200:
-                            results = result_response
-                            break
-                        time.sleep(1)  # Wait for 1 second before polling again
+            response = requests.post(url, headers=headers, data=json_data)
 
-                # Clear the loading spinner
-                st.spinner()
-                # Display the results
-                st.write("Results:")
-                for result in results:
-                    st.write(result)
+            if response.status_code == 200:
+                results = response.json()
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
+                st.markdown("<div class='results-box'><h3>According to our model, the following posts are similar to your query:</h3></div>", unsafe_allow_html=True)
+                for result in results['text']:
+                    st.write(f"<div class='result-item'>• {result}</div>", unsafe_allow_html=True)
+            else:
+                st.error("There was an error processing your query.")
 
     elif mode == "Fetch Similar Posts":
-        similar_query = st.text_input("Enter your query:") # Get the user's query for similar posts
-        if st.button("Submit"): # If the fetch button is pressed
-            # Add your logic here to fetch similar posts based on the query
-
-            # Display a loading spinner
+        similar_query = st.text_input("Enter your query:")
+        if st.button("Submit"):
             with st.spinner("Fetching similar posts to your query..."):
-                # Simulate a delay to show the loading animation
                 time.sleep(3)
 
-                # dummy result - TODO: replace with proper FUNCTION CALL
-                similar_posts = ["Example Post 1", "Example Post 2", "Example Post 3"]  # Example data, replace with your logic
-
-                # Clear the loading spinner
+                similar_posts = ["Example Post 1", "Example Post 2", "Example Post 3"]
                 st.spinner()
 
-                # Dummy result diplay - TODO: replace with proper FUNCTION CALL
-                st.write("Similar Posts:")
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
+                st.markdown("<div class='results-box'><h3>Similar Posts:</h3></div>", unsafe_allow_html=True)
                 for post in similar_posts:
-                    st.write(post)
+                    st.write(f"<div class='result-item'>{post}</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
