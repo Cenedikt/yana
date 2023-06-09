@@ -41,12 +41,12 @@ def set_background(png_file):
 
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-img = Image.open('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
+img = Image.open('yana/Frontend/Content/Yana_logo_image.png')
 
 st.set_page_config(page_title='YANA', page_icon=img)
 
 def main():
-    set_background('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
+    set_background('yana/Frontend/Content/Yana_background_image.png')
 
     st.markdown('''
     <style>
