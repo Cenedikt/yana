@@ -36,8 +36,7 @@ def set_background(png_file):
         font-size: 20px;
         font-weight: bold;
     }
-    #MainMenu {visibility: hidden; }
-    footer {visibility: hidden;}
+   ####
     </style>
     ''' % bin_str
 
@@ -59,7 +58,8 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             headers = {'Content-Type': 'application/json'}
-            url = "http://127.0.0.1:8000/query/"
+            # url = "http://127.0.0.1:8000/query/"
+            url = "http://0.0.0.0:8890/query/"
             data = {"text": query}
             json_data = json.dumps(data)
 
