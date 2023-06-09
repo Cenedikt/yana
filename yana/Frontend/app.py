@@ -1,10 +1,9 @@
 import streamlit as st
 from PIL import Image
 import requests
-from yana.api.api import get_result, create_query
 import time
 import base64
-from scripts.models import Model1_1
+import json
 
 
 # Function to convert a binary file to base64 encoding
@@ -16,12 +15,11 @@ def get_base64(bin_file):
 
 # Function to set the background image of the Streamlit application
 def set_background(png_file):
-    bin_str = get_base64(png_file) # Convert the PNG image file to base64 encoding and setting image as backgrouond.
+    bin_str = get_base64(png_file)
     page_bg_img = '''
     <style>
     .stApp {
     background-image: url("data:image/png;base64,%s");
-    background-size: cover;
     background-size: cover;
     }
     .stTextInput input {
@@ -38,73 +36,144 @@ def set_background(png_file):
         font-size: 20px;
         font-weight: bold;
     }
-    #MainMenu {visibility: hidden; } # Hide Menu
-        footer {visibility: hidden;} # Hide footer
+    #MainMenu {visibility: hidden; }
+    footer {visibility: hidden;}
     </style>
     ''' % bin_str
 
-    st.markdown(page_bg_img, unsafe_allow_html=True) # Apply the background image using Streamlit's markdown feature
+    st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# URL of the FastAPI service
-API_URL = 'http://127.0.0.1:8000'  # replace with your actual URL
+img = Image.open('/home/dizziebeatz/code/Cenedikt/yana/yana/Frontend/Content/Yana_logo_image.png')
 
-img = Image.open('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_logo_image.png')
-
-st.set_page_config(page_title='YANA', page_icon=img) # Setting the page title and icon
+st.set_page_config(page_title='YANA', page_icon=img)
 
 def main():
-    set_background('/home/emanuel/code/cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
+    set_background('/home/dizziebeatz/code/Cenedikt/yana/yana/Frontend/Content/Yana_background_image.png')
 
-    st.markdown(
-    """<h1 style='text-align: center;'>YANA: You are not alone</h1>
-    """,unsafe_allow_html=True) # Header 1
-    st.markdown("""<h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3>
-    <p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p>
-    """,unsafe_allow_html=True) # Description
-    st.markdown("<h4 class='big-text'>Mode:</h4>", unsafe_allow_html=True) # Display a header2
-    mode = st.radio("", ["Query", "Fetch Similar Posts"]) # Radio button to select the mode
+    st.markdown("<h1 style='text-align: center;'>YANA: You are not alone</h1>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3><p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p>", unsafe_allow_html=True)
+    st.markdown("<h4 class='big-text'>Mode:</h4>", unsafe_allow_html=True)
+    mode = st.radio("", ["Query", "Fetch Similar Posts"])
 
     if mode == "Query":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            # POST the query to the API
-            response = requests.post(f'{API_URL}/query/{query}')
+            headers = {'Content-Type': 'application/json'}
+            url = "http://127.0.0.1:8000/query/"
+            data = {"text": query}
+            json_data = json.dumps(data)
 
-            if response == 200:
-                # Display a loading spinner
-                with st.spinner("Generating results..."):
-                    # Continuously poll the GET endpoint until results are available
-                    while True:
-                        result_response = requests.get(API_URL,params=query)
-                        if result_response == 200:
-                            results = result_response
-                            break
-                        time.sleep(1)  # Wait for 1 second before polling again
+            response = requests.post(url, headers=headers, data=json_data)
 
-                # Clear the loading spinner
-                st.spinner()
-                # Display the results
+            if response.status_code == 200:
+                results = response.json()
                 st.write("Results:")
-                for result in results:
+                for result in results['text']:
                     st.write(result)
+            else:
+                st.error("There was an error processing your query.")
+
+    # if mode == "Query":
+    #     query = st.text_input("Enter your query:")
+    #     if st.button("Submit"):
+    #         headers = {'Content-Type': 'application/json'}
+    #         url = "http://127.0.0.1:8000/query/"
+    #         data = {"text": query}
+    #         json_data = json.dumps(data)
+
+    #         response = requests.post(url, headers=headers, data=json_data)
+
+    #         if response.status_code == 200:
+    #             with st.spinner("Generating results..."):
+    #                 max_attempts = 30
+    #                 attempts = 0
+    #                 while attempts < max_attempts:
+    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
+    #                     results_response = requests.get(results_url)
+    #                     if results_response.status_code == 200:
+    #                         results = results_response.json()
+    #                         st.spinner()
+    #                         st.write("Results:")
+    #                         for result in results:
+    #                             st.write(result)
+    #                         break
+    #                     elif results_response.status_code == 202:
+    #                         attempts += 1
+    #                         time.sleep(1)
+    #                     else:
+    #                         st.error("There was an error retrieving the results.")
+    #                         break
+    #                 if attempts == max_attempts:
+    #                     st.error("Result retrieval timed out.")
+    #         else:
+    #             st.error("There was an error processing your query.")
+
+    # if mode == "Query":
+    #     query = st.text_input("Enter your query:")
+    #     if st.button("Submit"):
+    #         url = "http://127.0.0.1:8000/query/"
+    #         headers = {'Content-Type': 'application/json'}
+    #         data = {"text": query}
+    #         json_data = json.dumps(data)
+
+    #         response = requests.post(url, headers=headers, data=json_data)
+
+    #         if response.status_code == 200:
+    #             with st.spinner("Generating results..."):
+    #                 max_attempts = 3
+    #                 attempts = 0
+    #                 while attempts < max_attempts:
+    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
+    #                     results_response = requests.get(results_url)
+    #                     if results_response.status_code == 200:
+    #                         results = results_response.json()
+    #                         st.spinner()
+    #                         st.write("Results:")
+    #                         for result in results:
+    #                             st.write(result)
+    #                         break
+    #                     attempts += 1
+    #                     time.sleep(6)
+    #                 if attempts == max_attempts:
+    #                     st.error("Result retrieval timed out.")
+    #         else:
+    #             st.error("There was an error processing your query.")
+
+    # if mode == "Query":
+    #     query = st.text_input("Enter your query:")
+    #     if st.button("Submit"):
+    #         url = "http://127.0.0.1:8000/query/"
+    #         headers = {'Content-Type': 'application/json'}
+    #         data = {"text": query}
+    #         json_data = json.dumps(data)
+
+    #         response = requests.post(url, headers=headers, data=json_data)
+
+    #         if response.status_code == 200:
+    #             with st.spinner("Generating results..."):
+    #                 while True:
+    #                     results_url = f"http://127.0.0.1:8000/result/{query}"
+    #                     results_response = requests.get(results_url)
+    #                     if results_response.status_code == 200:
+    #                         results = results_response.json()
+    #                         st.spinner()
+    #                         st.write("Results:")
+    #                         for result in results:
+    #                             st.write(result)
+    #                         break
+    #                     time.sleep(1)
+    #         else:
+    #             st.error("There was an error processing your query.")
 
     elif mode == "Fetch Similar Posts":
-        similar_query = st.text_input("Enter your query:") # Get the user's query for similar posts
-        if st.button("Submit"): # If the fetch button is pressed
-            # Add your logic here to fetch similar posts based on the query
-
-            # Display a loading spinner
+        similar_query = st.text_input("Enter your query:")
+        if st.button("Submit"):
             with st.spinner("Fetching similar posts to your query..."):
-                # Simulate a delay to show the loading animation
                 time.sleep(3)
 
-                # dummy result - TODO: replace with proper FUNCTION CALL
-                similar_posts = ["Example Post 1", "Example Post 2", "Example Post 3"]  # Example data, replace with your logic
-
-                # Clear the loading spinner
+                similar_posts = ["Example Post 1", "Example Post 2", "Example Post 3"]
                 st.spinner()
 
-                # Dummy result diplay - TODO: replace with proper FUNCTION CALL
                 st.write("Similar Posts:")
                 for post in similar_posts:
                     st.write(post)
