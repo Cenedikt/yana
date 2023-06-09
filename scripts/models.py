@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import requests
+import json
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import semantic_search, torch
 
@@ -42,7 +44,7 @@ class Model1_1():
         search_results = []
 
         if corpus_embeddings is None:
-            data = '../data/embedding.pt'
+            data = '../yana/data/embedding.pt'
             corpus_embeddings = torch.load(data)
 
         query_embeddings = Model1_1.embed(self,query)
@@ -63,9 +65,43 @@ class Model1_1():
 
         return search_results
 
-class Model1_2():
+
+
+class Model1_2(Model1_1):
     '''This class an upgrade from Model1_1 that also performs additional operations on the search results'''
 
     # Here are the different transformers we can use; for now, we can use fast and best
     fast = 'sentence-transformers/all-MiniLM-L6-v2'
     best = 'sentence-transformers/all-mpnet-base-v2'
+
+    def __init__(self, model = fast) -> None:
+        self.model = SentenceTransformer(model)
+        return None
+
+    def query_llm(payload):
+        data = json.dumps(payload)
+        response = requests.request("POST","https://api-inference.huggingface.co/models/deepset/tinyroberta-squad2", headers = {"Authorization": "Bearer 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"}, json = payload)
+        return response.json()
+
+    def advice(self, user_query):
+        '''This is the main function of the model: it performs a semantic search through Model1_1, and then looks for advice in the results'''
+
+        # This is the prompt that will perform the advice inferrence from the context (the closest matches). It should be fixed, and we need to do prompt engineering to ensure the best results
+        prompt = f"The user describes the following mental health struggle: {user_query}. Given this described struggle, you will look for possible advice to give to the user from the context data, which is composed of several related posts from mental health subreddits"
+        #prompt = 'Summarize the following reddit posts'
+
+
+        model = Model1_1()
+        search_results = model.search(query=user_query,results=10)
+        context = ' '.join(search_results)
+
+        print('Initiating large language model...')
+
+        output = Model1_2.query_llm({
+    	"inputs": {
+    		"question": prompt,
+    		"context": context
+    	},
+    })
+        print(output)
+        return output
