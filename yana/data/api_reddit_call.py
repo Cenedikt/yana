@@ -1,6 +1,8 @@
 import pandas as pd
 import praw
 
+from yana.params import *
+
 class ApiRedditCall :
 
     def __init__(self) -> None:
