@@ -7,7 +7,10 @@ requirements = [x.strip() for x in content if 'git+' not in x]
 
 setup(name='yana',
       version="1.0",
-      description="Project Description",
+      description="Mental Health Platform for finding people who went through similar experiences",
+      license='TheYellowFromTheEggAg',
+      author='',
+      author_email='',
       packages=find_packages(),
       install_requires=requirements,
       test_suite='tests',
