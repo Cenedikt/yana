@@ -1,9 +1,20 @@
 import streamlit as st
-from PIL import Image
+import os
 import requests
 import time
 import base64
 import json
+
+
+# Construct OS-agnostic paths & load images
+script_path = os.path.abspath(__file__)
+parent_dir = os.path.dirname(os.path.dirname(script_path))
+yana_logo_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Yana_logo.png')
+yana_background_path = os.path.join(parent_dir, 'Frontend', 'Content', 'yana_background.jpeg')
+
+# Call st.set_page_config() as the first Streamlit command
+st.set_page_config(page_title='YANA', page_icon=yana_logo_path)
+
 
 # Function to convert a binary file to base64 encoding
 def get_base64(bin_file):
@@ -41,12 +52,10 @@ def set_background(png_file):
 
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-img = Image.open('/yana/Frontend/Content/Yana_logo.png')
 
-st.set_page_config(page_title='YANA', page_icon=img)
 
 def main():
-    set_background('/yana/Frontend/Content/yana_background.jpeg')
+    set_background(yana_background_path)
 
     st.markdown('''
     <style>
