@@ -23,7 +23,7 @@ pyenv install 3.11.3
 ```
 
 Unittest test:
-```bash
+```bashwd
 make clean install test
 ```
 
