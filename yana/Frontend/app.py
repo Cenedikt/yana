@@ -89,10 +89,9 @@ def main():
         if st.button("Submit"):
             url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
             headers = {'Content-Type': 'application/json'}
-            data = {"text": query}
-            json_data = json.dumps(data)
 
-            response = requests.post(url, headers=headers, data=json_data)
+            url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
+
 
             if response.status_code == 200:
                 results = response.json()
@@ -106,6 +105,7 @@ def main():
                     st.markdown(results_html, unsafe_allow_html=True)
             else:
                 st.error("There was an error processing your query.")
+
 
     elif mode == "Fetch Similar Posts":
         similar_query = st.text_input("Enter your query:")
