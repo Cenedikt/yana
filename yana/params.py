@@ -13,3 +13,4 @@ BQ_REGION = os.environ.get("BQ_REGION")
 
 #################### Constant ####################
 SUBREDDITS = ['askatherapist']
+
