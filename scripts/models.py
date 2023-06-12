@@ -4,6 +4,21 @@ import requests
 import json
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import semantic_search, torch
+import os
+
+# Get the current directory path
+current_dir = os.path.dirname(os.path.realpath(__file__))
+# Define the relative path to your file
+relative_path_embedding_pt = '../yana/data/embedding.pt'
+# Get the absolute path
+relative_path_csv = 'yana/data/depression_dataset_reddit_cleaned.csv'
+
+absolute_path_csv = os.path.abspath(os.path.join(current_dir, relative_path_csv))
+
+absolute_path = os.path.abspath(os.path.join(current_dir, relative_path_embedding_pt))
+# Use the absolute path in the save function
+# torch.save(embedded, absolute_path)
+
 
 class Model1_1():
     '''This class is an adaptation of the SentenceTransformer library for our purposes'''
@@ -27,8 +42,10 @@ class Model1_1():
         embedded =  self.model.encode(data,show_progress_bar=True,convert_to_tensor=True)
         print('Your input has been embedded successfully!')
 
+
+
         if save == True:
-            torch.save(embedded,'../yana/data/embedding.pt') #USE ABSOLUTE PATHS, get using python methods (os.path.join)
+            torch.save(embedded, absolute_path) #USE ABSOLUTE PATHS, get using python methods (os.path.join)
             print('Embedding saved as yana/yana/data/embedding.pt')
         return embedded
 
@@ -44,7 +61,7 @@ class Model1_1():
         search_results = []
 
         if corpus_embeddings is None:
-            data = '../yana/data/embedding.pt'
+            data = absolute_path
 
             corpus_embeddings = torch.load(data)
 
@@ -54,7 +71,7 @@ class Model1_1():
         print(f'Your query was: {query}')
         print('\nHere are your closest matches:\n')
 
-        with open('yana/data/depression_dataset_reddit_cleaned.csv', 'r') as file:
+        with open(absolute_path_csv, 'r') as file:
             data = pd.read_csv(file)
             posts = data['clean_text'].astype('string')
 
@@ -105,4 +122,4 @@ class Model1_2(Model1_1):
     	},
     })
         print(output)
-        return output
+        return output["answer"]

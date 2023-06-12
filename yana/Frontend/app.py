@@ -78,6 +78,7 @@ def main():
     st.markdown('''
     <style>
     .title-box {
+
         background-color: rgba(0, 0, 0, 0.05);
         padding: 20px;
         border-radius: 10px;
@@ -101,6 +102,7 @@ def main():
         padding: 20px;
         border-radius: 10px;
         border: 1px solid rgba(0, 0, 0, 0.4);
+
         margin-bottom: 20px;
     }
     </style>
