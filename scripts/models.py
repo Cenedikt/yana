@@ -11,6 +11,10 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 # Define the relative path to your file
 relative_path_embedding_pt = '../yana/data/embedding.pt'
 # Get the absolute path
+relative_path_csv = 'yana/data/depression_dataset_reddit_cleaned.csv'
+
+absolute_path_csv = os.path.abspath(os.path.join(current_dir, relative_path_csv))
+
 absolute_path = os.path.abspath(os.path.join(current_dir, relative_path_embedding_pt))
 # Use the absolute path in the save function
 # torch.save(embedded, absolute_path)
@@ -57,7 +61,7 @@ class Model1_1():
         search_results = []
 
         if corpus_embeddings is None:
-            data = '../yana/data/embedding.pt'
+            data = absolute_path
 
             corpus_embeddings = torch.load(data)
 
@@ -67,7 +71,7 @@ class Model1_1():
         print(f'Your query was: {query}')
         print('\nHere are your closest matches:\n')
 
-        with open('yana/data/depression_dataset_reddit_cleaned.csv', 'r') as file:
+        with open(absolute_path_csv, 'r') as file:
             data = pd.read_csv(file)
             posts = data['clean_text'].astype('string')
 
@@ -118,4 +122,4 @@ class Model1_2(Model1_1):
     	},
     })
         print(output)
-        return output
+        return output["answer"]

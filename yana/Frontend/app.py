@@ -4,7 +4,6 @@ import requests
 import time
 import base64
 import json
-import os
 
 
 # Construct OS-agnostic paths & load images
@@ -50,10 +49,10 @@ def set_background(png_file):
     #MainMenu {visibility: hidden; }
     footer {visibility: hidden;}
     .result-card {
-        background-color: rgba(242, 242, 242, 0.3);
+        background-color: rgba(0, 0, 0, 0.2);
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         margin-bottom: 20px;
     }
     </style>
@@ -68,29 +67,29 @@ def main():
     st.markdown('''
     <style>
     .title-box {
-        background-color: rgba(242, 242, 242, 0.3);
+        background-color: rgba(0, 0, 0, 0.2);
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .description-box {
-        background-color: rgba(242, 242, 242, 0.3);
+        background-color: rgba(0, 0, 0, 0.2);
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .results-box {
-        background-color: rgba(242, 242, 242, 0.3);
+        background-color: rgba(0, 0, 0, 0.2);
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         text-align: center;
     }
     .result-card {
-        background-color: rgba(242, 242, 242, 0.3);
+        background-color: rgba(0, 0, 0, 0.2);
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         margin-bottom: 20px;
     }
     </style>
