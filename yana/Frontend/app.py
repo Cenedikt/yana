@@ -4,6 +4,7 @@ import requests
 import time
 import base64
 import json
+import os
 
 
 # Construct OS-agnostic paths & load images
