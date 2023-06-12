@@ -41,12 +41,12 @@ def set_background(png_file):
 
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-img = Image.open('yana/Frontend/Content/Project Retro Deck (2).png')
+img = Image.open('/yana/Frontend/Content/Yana_logo.png')
 
 st.set_page_config(page_title='YANA', page_icon=img)
 
 def main():
-    set_background('yana/Frontend/Content/yana.jpeg')
+    set_background('/yana/Frontend/Content/yana_background.jpeg')
 
     st.markdown('''
     <style>
