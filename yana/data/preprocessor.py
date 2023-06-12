@@ -3,10 +3,10 @@ import numpy as np
 import random
 
 class Preprocessor:
+
     def __init__(self,data):
         '''Conscructor and takes DataFrame as input'''
         self.data = data
-        return None
 
     def preprocessor(self):
         if self.data.shape[1] != 7:

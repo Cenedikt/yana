@@ -13,19 +13,18 @@ class ApiRedditCall :
             user_agent= USER_AGENT,
         )
 
-    def get_posts(self, subreddit: str, amount: int) -> pd.DataFrame:
+    def get_posts(self, subreddit: str,) -> pd.DataFrame:
         '''
         creates an API request to Reddit and scrabbes the Subbredit
         Params:
             subbredit: is an String and takes the name of a Subreddit
-            amount: is an int and scrapes the amount of comments desc
         Return: returns a Df with the important information of the post
         '''
 
         subreddit_request = self.reddit.subreddit(subreddit)
         subreddit_request
 
-        submissons = subreddit_request.top(limit=amount)
+        submissons = subreddit_request.top(limit=None)
 
         index = 0
         posts = {}
@@ -44,6 +43,8 @@ class ApiRedditCall :
             index +=1
 
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
+
+        self.get_used_requests()
 
         return df
 
@@ -73,4 +74,11 @@ class ApiRedditCall :
 
         df = pd.DataFrame.from_dict(comments,orient='index' ,columns=columns)
 
+        self.get_used_requests()
+
         return df
+
+    def get_used_requests(self)->int:
+        used_requests = self.reddit.auth.limits['used']
+        print(f"Used requests:", {used_requests})
+        return used_requests
