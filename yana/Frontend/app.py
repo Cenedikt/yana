@@ -4,6 +4,7 @@ import requests
 import time
 import base64
 import json
+import os
 
 # Function to convert a binary file to base64 encoding
 def get_base64(bin_file):

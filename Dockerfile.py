@@ -6,9 +6,6 @@ WORKDIR /app
 
 RUN pip install --upgrade pip
 
-# Copy the .env file
-COPY .env .env
-
 # Copy the current directory contents into the container at /app
 COPY requirements.txt /yana/api/requirements.txt
 COPY requirements.txt requirements.txt
