@@ -19,8 +19,10 @@ class Data :
         makes an api request to get Posts and saves the data into BiQuerry
         '''
         print(f'start saving the Data.....')
-        df = ApiRedditCall().get_posts()
-
+        df = self.api_call.get_posts()
+        # path=('/home/cenedikt/code/Cenedikt/yana/yana/data/depression_dataset_reddit_cleaned.csv')
+        # df = pd.read_csv(path)
+        # print(df)
         pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_posts}', project_id=self.gcp_project_id, if_exists='replace')
         print(f"✅ Data saved to bigquery")
 
@@ -46,7 +48,7 @@ class Data :
         '''
         self.get_post_id()
 
-        df = ApiRedditCall().get_commets()
+        df = self.api_call.get_commets()
         print(df)
         #pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_comments}', project_id=self.gcp_project_ID, if_exists='truncate')
 
