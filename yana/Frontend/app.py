@@ -71,6 +71,11 @@ font_style = f"""
 
 .title-box h1 {{
     font-family: 'Bukhari Script', sans-serif;
+    color: #F6F3E4;  /* Set the color to #F6F3E4 */
+    text-shadow: 0 0 10px rgba(255, 83, 100, 0.9),
+                 0 0 20px rgba(255, 83, 100, 0.6),
+                 0 0 30px rgba(255, 83, 100, 0.4),
+                 0 0 40px rgba(255, 83, 100, 0.2);
 }}
 """
 
@@ -79,33 +84,35 @@ def main():
 
     st.markdown('''
     <style>
-    .title-box {
-
-        background-color: rgba(0, 0, 0, 0.05);
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
-    }
     .description-box {
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: rgba(255, 83, 100, 0.5);  /* Set the background color to #BFD786 with 0.1 transparency */
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
+        color: #F6F3E4;
+        box-shadow: 0 0 20px rgba(255, 83, 100, 0.6),
+                    0 0 30px rgba(255, 83, 100, 0.4),
+                    0 0 40px rgba(255, 83, 100, 0.2);
     }
     .results-box {
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: rgba(255, 83, 100, 0.5);  /* Set the background color to #BFD786 with 0.1 transparency */
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
         text-align: center;
+        color: #F6F3E4;
+        box-shadow: 0 0 20px rgba(255, 83, 100, 0.6),
+                    0 0 30px rgba(255, 83, 100, 0.4),
+                    0 0 40px rgba(255, 83, 100, 0.2);
     }
     .result-card {
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: rgba(255, 83, 100, 0.5);  /* Set the background color to #BFD786 with 0.1 transparency */
         padding: 20px;
         border-radius: 10px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
-
+        text-align: center;
         margin-bottom: 20px;
+        color: #F6F3E4;
+        box-shadow: 0 0 20px rgba(255, 83, 100, 0.6),
+                    0 0 30px rgba(255, 83, 100, 0.4),
+                    0 0 40px rgba(255, 83, 100, 0.2);
     }
     </style>
     ''', unsafe_allow_html=True)
@@ -113,8 +120,8 @@ def main():
     st.markdown(f"<style>{font_style}</style>", unsafe_allow_html=True)
 
     # Display the title with the Bukhari Script font
-    st.markdown("<div class='title-box'><h1 style='text-align: center;'>Yana you are not alone</h1></div>", unsafe_allow_html=True)
-    st.markdown("<div class='description-box'><h3 style='text-align: center;'>Welcome to our Mental Health Platform powered by NLP</h3><p style='text-align: center;'>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='title-box'><h1 style='text-align: center; margin-bottom: 25px;'> Yana - you are not alone</h1></div>", unsafe_allow_html=True)
+    st.markdown("<div class='description-box' style='background-color: rgba(255, 83, 100, 0.5); padding: 20px; border-radius: 10px; color: #F6F3E4; backdrop-filter: blur(5px); margin-bottom: 20px;'><h3 style='text-align: center; color: #F6F3E4; text-shadow: none;'>Welcome to our Mental Health Platform powered by Natural Language Processing</h3><p style='text-align: center; font-size: 18px; color: #F6F3E4; text-shadow: none;'><strong>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</strong></p></div>", unsafe_allow_html=True)
 
     mode = st.radio("Select an option:", ["Fetch Similar Reddit Posts", "Get Advice*"])
 
@@ -132,7 +139,7 @@ def main():
                 results = response.json()
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown("<h3 style='text-align: center;'>According to our Model, the following Reddit posts are similar to your query:</h3>", unsafe_allow_html=True)
+                st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to our Model, the following Reddit posts are similar to your query:</h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     st.markdown('''
                         <div class="result-card">
