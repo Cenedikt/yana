@@ -1,54 +1,58 @@
 import pandas as pd
 import praw
+from colorama import Fore, Style
 
 from yana.params import *
 
 class ApiRedditCall :
 
     def __init__(self) -> None:
-        self.reddit = reddit = praw.Reddit(
+        self.reddit = praw.Reddit(
             client_id= CLIENT_ID,
             client_secret= CLIENT_SECRET,
             redirect_uri= REDIRECT_URI,
             user_agent= USER_AGENT,
         )
+        self.subreddits = SUBREDDITS
 
-    def get_posts(self, subreddit: str,) -> pd.DataFrame:
+    def get_posts(self) -> pd.DataFrame:
         '''
         creates an API request to Reddit and scrabbes the Subbredit
-        Params:
-            subbredit: is an String and takes the name of a Subreddit
         Return: returns a Df with the important information of the post
         '''
-
-        subreddit_request = self.reddit.subreddit(subreddit)
-        subreddit_request
-
-        submissons = subreddit_request.top(limit=None)
-
-        index = 0
+        print(f'start scraping the data from reddit.....')
         posts = {}
-        columns=['id','author','title','subreddit','selftext','ups','permalink']
+        for subreddit in self.subreddits:
+            print(f'start scraping the data from reddit from the subreddit {subreddit}.....')
+            subreddit_request = self.reddit.subreddit(subreddit)
+            subreddit_request
 
-        for post in submissons :
-            posts[index]= [
-                post.id,
-                post.author,
-                post.title,
-                post.subreddit.display_name,
-                post.selftext,
-                post.ups,
-                post.permalink
-            ]
-            index +=1
+            submissons = subreddit_request.top(limit=10)
 
+            index = 0
+
+            columns=['id','author','title','subreddit','selftext','ups','permalink']
+
+            for post in submissons :
+                posts[index]= [
+                    post.id,
+                    post.author,
+                    post.title,
+                    post.subreddit.display_name,
+                    post.selftext,
+                    post.ups,
+                    post.permalink
+                ]
+                index +=1
+            print(f"✅ Data has been scrapped from the subreddit {subreddit}")
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
 
         self.get_used_requests()
 
+        print(f"✅ Data has been scrapped")
         return df
 
-    def get_commets(self, post_id: str ) -> pd.DataFrame :
+    def get_commets(self, post_id: str) -> pd.DataFrame :
         '''
         gets all the comments from a post
         Params:
