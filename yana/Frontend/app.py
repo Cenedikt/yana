@@ -5,6 +5,8 @@ import time
 import base64
 import json
 
+from yana.http_encoder import http_encoder
+
 
 # Construct OS-agnostic paths & load images
 script_path = os.path.abspath(__file__)
@@ -129,26 +131,28 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
-            url = 'http://127.0.0.1:8000/query_1/'
+            url = 'http://localhost:8000/query_1'
             headers = {'Content-Type': 'application/json'}
             data = {"text": query}
             json_data = json.dumps(data)
+            params =  {'query' : http_encoder(query)}
 
-            response = requests.post(url, headers=headers, data=json_data)
+            response = requests.get(url, params=params)
 
             if response.status_code == 200:
                 results = response.json()
+                print(results)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
                 st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to our Model, the following Reddit posts are similar to your query:</h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
-                    st.markdown('''
+                    st.markdown(f'''
                         <div class="result-card">
-                            # <h4>👤Username: Username</h4>
-                            # <h4>📌Title: Title</h4>
-                            <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{result}</span></p>
-                            # <h4>/🇷🇪 Subreddit: Subreddit</h4>
-                            # <h4>👍Upvotes: Upvotes</h4>
+                            <h4>👤Username: {result['author']}</h4>
+                            <h4>📌Title: {result['title']}</h4>
+                            <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
+                            <h4>🇷🇪 Subreddit: {result['subreddit']}</h4>
+                            <h4>👍Upvotes: {result['ups']}</h4>
                         </div>
                 '''.format(result=result), unsafe_allow_html=True)
 
