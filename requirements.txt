@@ -36,5 +36,4 @@ sentence-transformers #--upgrade
 
 # Others
 streamlit
-base64
-time
+colorama
