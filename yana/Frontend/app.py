@@ -120,7 +120,7 @@ def main():
     st.markdown(f"<style>{font_style}</style>", unsafe_allow_html=True)
 
     # Display the title with the Bukhari Script font
-    st.markdown("<div class='title-box'><h1 style='text-align: center; margin-bottom: 25px;'> Yana - you are not alone</h1></div>", unsafe_allow_html=True)
+    st.markdown("<div class='title-box'><h1 style='text-align: center; margin-bottom: 55px;'> Yana - you are not alone</h1></div>", unsafe_allow_html=True)
     st.markdown("<div class='description-box' style='background-color: rgba(255, 83, 100, 0.5); padding: 20px; border-radius: 10px; color: #F6F3E4; backdrop-filter: blur(5px); margin-bottom: 20px;'><h3 style='text-align: center; color: #F6F3E4; text-shadow: none;'>Welcome to our Mental Health Platform powered by Natural Language Processing</h3><p style='text-align: center; font-size: 18px; color: #F6F3E4; text-shadow: none;'><strong>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</strong></p></div>", unsafe_allow_html=True)
 
     mode = st.radio("Select an option:", ["Fetch Similar Reddit Posts", "Get Advice*"])
@@ -167,14 +167,13 @@ def main():
             #            subreddit = result['Subreddit']
             #            upvotes = result['Upvotes']
 
-
             #         st.markdown('''
             #             <div class="result-card">
-            #                 <h4>👤Username: {author}</h4>
-            #                 <h4>📌Title: {title}</h4>
+            #                 <p style="font-size: 20px;"><strong>👤Username: </strong> <span style="font-size: 18px;">{author}</span></p>
+            #                 <p style="font-size: 20px;"><strong>📌Title: </strong> <span style="font-size: 18px;">{title}</span></p>
             #                 <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{body}</span></p>
-            #                 <h4>/🇷🇪 Subreddit: {subreddit}</h4>
-            #                 <h4>👍Upvotes: {upvotes}</h4>
+            #                 <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit: </strong> <span style="font-size: 18px;">{subreddit}</span></p>
+            #                 <p style="font-size: 20px;"><strong>👍Upvotes: </strong> <span style="font-size: 18px;">{upvotes}</span></p>
             #             </div>
             #         '''.format(author=result['Author'], title=result['Title'], body=result['Body'], subreddit=result['Subreddit'], upvotes=result['Upvotes']), unsafe_allow_html=True)
             # else:
@@ -204,11 +203,11 @@ def main():
 
                     st.markdown('''
                         <div class="result-card">
-                            <h4>👤Username: {author}</h4>
-                            <h4>📌Title: {title}</h4>
+                            <p style="font-size: 20px;"><strong>👤Username: </strong> <span style="font-size: 18px;">{author}</span></p>
+                            <p style="font-size: 20px;"><strong>📌Title: </strong> <span style="font-size: 18px;">{title}</span></p>
                             <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{body}</span></p>
-                            <h4>/🇷🇪 Subreddit: {subreddit}</h4>
-                            <h4>👍Upvotes: {upvotes}</h4>
+                            <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit: </strong> <span style="font-size: 18px;">{subreddit}</span></p>
+                            <p style="font-size: 20px;"><strong>👍Upvotes: </strong> <span style="font-size: 18px;">{upvotes}</span></p>
                         </div>
                     '''.format(author=result['Author'], title=result['Title'], body=result['Body'], subreddit=result['Subreddit'], upvotes=result['Upvotes']), unsafe_allow_html=True)
 
