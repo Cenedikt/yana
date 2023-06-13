@@ -13,9 +13,18 @@ class Query(BaseModel):
     """Data model for user queries."""
     text: str = Field(..., max_length=1000)
 
+class Post(BaseModel):
+    """Data model for individual posts."""
+    Title: str
+    Author: str
+    Body: str
+    Subreddit: str
+    Upvotes: int
+
 class Response(BaseModel):
     """Data model for the responses."""
-    text: List[str]
+    posts: List[Post]
+
 
 model = Model1_1()
 
