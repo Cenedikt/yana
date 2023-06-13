@@ -37,6 +37,7 @@ def predict(user_query: str):
 
     # Assuming the prediction is a list of 3 sentences
     # results_dict[user_query] = prediction
+    print(prediction)
     return prediction
 
 # Predict for Model1_1
@@ -47,14 +48,14 @@ async def create_query(query: Query):
     """
     user_query = query.text
     prediction = predict(user_query)
-    return {"text": prediction}
+    return {"posts": prediction}
 
 ############################# MODEL1_2 #################################
 
 class Post(BaseModel):
     """Data model for individual posts."""
-    Title: str
     Author: str
+    Title: str
     Body: str
     Subreddit: str
     Upvotes: int

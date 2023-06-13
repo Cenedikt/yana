@@ -56,9 +56,9 @@ class Model1_1():
 
 
 
-        #if save == True:
-        #    torch.save(embedded, absolute_path_embeddings) #USE ABSOLUTE PATHS, get using python methods (os.path.join)
-        #    print('Embedding saved as yana/yana/data/embedding.pt')
+        if save == True:
+           torch.save(embedded, absolute_path_embeddings) #USE ABSOLUTE PATHS, get using python methods (os.path.join)
+           print('Embedding saved as yana/yana/data/embedding.pt')
         return embedded
 
     # SEARCH
@@ -89,8 +89,8 @@ class Model1_1():
 
             for i,k in enumerate(pred[0]):
                 #print(k)
-                search_results.append(posts[k['corpus_id']].to_dict())
-                print(f"{i+1}: {posts[k['corpus_id']]}")
+                search_results.append(posts.iloc[k['corpus_id'],0:].to_dict())
+                print(f"{i+1}: {posts.iloc[k['corpus_id'],0:]}")
                 print('\n')
 
         return search_results
