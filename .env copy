@@ -1,5 +1,0 @@
-#Reddit Credetials
-CLIENT_ID = '<get the information from Slack>'
-CLIENT_SECRET = '<get the information from Slack>'
-REDIRECT_URI = '<get the information from Slack>'
-USER_AGENT = '<get the information from Slack>'
