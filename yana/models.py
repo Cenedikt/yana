@@ -8,12 +8,16 @@ import os
 
 # Get the current directory path
 current_dir = os.path.dirname(os.path.realpath(__file__))
-# Define the relative path to your file
+# Define the relative path to your files
 relative_path_embedding_pt = "./data/embedding.pt"
+relative_path_posts = "./data/posts.csv"
+relative_path_comments = "./data/comments.csv"
+
 # Get the absolute path
-relative_path_csv = "./data/depression_dataset_reddit_cleaned.csv"
-absolute_path_csv = os.path.abspath(os.path.join(current_dir, relative_path_csv))
-absolute_path = os.path.abspath(os.path.join(current_dir, relative_path_embedding_pt))
+
+absolute_path_embeddings = os.path.abspath(os.path.join(current_dir, relative_path_embedding_pt))
+absolute_path_posts = os.path.abspath(os.path.join(current_dir, relative_path_posts))
+absolute_path_comments = os.path.abspath(os.path.join(current_dir, relative_path_comments))
 
 
 class Model1_1():
@@ -49,7 +53,7 @@ class Model1_1():
 
 
         if save == True:
-            torch.save(embedded, absolute_path) #USE ABSOLUTE PATHS, get using python methods (os.path.join)
+            torch.save(embedded, absolute_path_embeddings) #USE ABSOLUTE PATHS, get using python methods (os.path.join)
             print('Embedding saved as yana/yana/data/embedding.pt')
         return embedded
 
@@ -65,7 +69,7 @@ class Model1_1():
         search_results = []
 
         if corpus_embeddings is None:
-            data = absolute_path
+            data = absolute_path_embeddings
 
             corpus_embeddings = torch.load(data)
 
@@ -75,7 +79,7 @@ class Model1_1():
         print(f'Your query was: {query}')
         print('\nHere are your closest matches:\n')
 
-        with open(absolute_path_csv, 'r') as file:
+        with open(absolute_path_posts, 'r') as file:
             data = pd.read_csv(file)
             posts = data[['id','author','title','selftext','subreddit','ups']]
 
@@ -112,9 +116,13 @@ class Model1_2(Model1_1):
         prompt = f"The user describes the following mental health struggle: {user_query}. Given this described struggle, you will look for possible advice to give to the user from the context data, which is composed of several related posts from mental health subreddits"
         #prompt = 'Summarize the following reddit posts'
 
-
+        # Search for 10 closest matches
         model = Model1_1()
         search_results = model.search(query=user_query,results=10)
+
+        # Retrieve comments of these posts and put them into the context
+        with open(absolute_path_comments, 'r') as file:
+            data = pd.read_csv(file)
         context = ' '.join(search_results)
 
         print('Initiating large language model...')
