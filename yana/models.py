@@ -35,7 +35,15 @@ class Model1_1():
         Args:
             - data: data to be embedded as pd.Series of strings, list of strings, or string
             - save: True if you want to save the embeddings tensor as .pt (default False)'''
-        embedded =  self.model.encode(data,show_progress_bar=True,convert_to_tensor=True)
+
+        # If the input is a dataframe, this part extracts the relevant text to be embedded
+
+        if type(data) == pd.DataFrame:
+            df = data.apply(lambda row: row['selftext'] if pd.notnull(row['selftext']) and row['selftext'].strip() != '' else row['title'], axis=1)
+
+
+
+        embedded =  self.model.encode(df,show_progress_bar=True,convert_to_tensor=True)
         print('Your input has been embedded successfully!')
 
 
@@ -73,7 +81,7 @@ class Model1_1():
 
             for i,k in enumerate(pred[0]):
                 #print(k)
-                search_results.append(posts[k['corpus_id']])
+                search_results.append(k['corpus_id'])
                 print(f"{i+1}: {posts[k['corpus_id']]}")
                 print('\n')
 
