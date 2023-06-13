@@ -8,6 +8,7 @@ import os
 
 # Get the current directory path
 current_dir = os.path.dirname(os.path.realpath(__file__))
+print(current_dir)
 # Define the relative path to your files
 relative_path_embedding_pt = "./data/embedding.pt"
 relative_path_posts = "./data/posts.csv"
@@ -18,6 +19,7 @@ relative_path_comments = "./data/comments.csv"
 absolute_path_embeddings = os.path.abspath(os.path.join(current_dir, relative_path_embedding_pt))
 absolute_path_posts = os.path.abspath(os.path.join(current_dir, relative_path_posts))
 absolute_path_comments = os.path.abspath(os.path.join(current_dir, relative_path_comments))
+print(absolute_path_posts)
 
 
 class Model1_1():
@@ -33,7 +35,7 @@ class Model1_1():
         return None
 
     # EMBED
-    def embed(self,data:pd.Series|list|str, save = False):
+    def embed(self,data:pd.DataFrame|list|str, save = False):
         '''Method that embeds new text (either document corpus or queries) into the multidimensional vector space
 
         Args:
@@ -43,7 +45,9 @@ class Model1_1():
         # If the input is a dataframe, this part extracts the relevant text to be embedded
 
         if type(data) == pd.DataFrame:
-            df = data.apply(lambda row: row['selftext'] if pd.notnull(row['selftext']) and row['selftext'].strip() != '' else row['title'], axis=1)
+            df = data['selftext']#.astype('string')#data.apply(lambda row: row['selftext'] if pd.notnull(row['selftext']) and row['selftext'].strip() != '' else row['title'], axis=1)
+        else:
+            df = data
 
 
 
@@ -52,9 +56,9 @@ class Model1_1():
 
 
 
-        if save == True:
-            torch.save(embedded, absolute_path_embeddings) #USE ABSOLUTE PATHS, get using python methods (os.path.join)
-            print('Embedding saved as yana/yana/data/embedding.pt')
+        #if save == True:
+        #    torch.save(embedded, absolute_path_embeddings) #USE ABSOLUTE PATHS, get using python methods (os.path.join)
+        #    print('Embedding saved as yana/yana/data/embedding.pt')
         return embedded
 
     # SEARCH
