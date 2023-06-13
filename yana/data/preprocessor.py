@@ -23,7 +23,7 @@ class Preprocessor:
             print(f'{index} {len(selftext)} {len(title)}')
             if selftext =='':
                 if len(title) <= 72 :
-                    df_ = data.drop(index)
+                    data = data.drop(index)
             elif len(selftext) <= 72 :
                 data = data.drop(index)
 
@@ -42,10 +42,10 @@ class Preprocessor:
         for index, row in data.iterrows():
             body = row['body']
             if len(body) <= 72 :
-                df_ = data.drop(index)
-        df_.author = df_.author.map(lambda x : str(x))
+                data = data.drop(index)
+        data.author = data.author.map(lambda x : str(x))
         print(f"✅ Data has been cleaned")
-        return df_
+        return data
 
 if __name__ == '__main__' :
     import pandas
