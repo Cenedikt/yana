@@ -128,7 +128,8 @@ def main():
     if mode == "Fetch Similar Reddit Posts":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
+            #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
+            url = 'http://127.0.0.1:8000/query_1/'
             headers = {'Content-Type': 'application/json'}
             data = {"text": query}
             json_data = json.dumps(data)
@@ -143,11 +144,11 @@ def main():
                 for result in results['text']:
                     st.markdown('''
                         <div class="result-card">
-                            <h4>👤Username: Username</h4>
-                            <h4>📌Title: Title</h4>
+                            # <h4>👤Username: Username</h4>
+                            # <h4>📌Title: Title</h4>
                             <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{result}</span></p>
-                            <h4>/🇷🇪 Subreddit: Subreddit</h4>
-                            <h4>👍Upvotes: Upvotes</h4>
+                            # <h4>/🇷🇪 Subreddit: Subreddit</h4>
+                            # <h4>👍Upvotes: Upvotes</h4>
                         </div>
                 '''.format(result=result), unsafe_allow_html=True)
 
