@@ -3,8 +3,8 @@ import pandas_gbq
 import os
 from colorama import Fore, Style
 
-from api_reddit_call import ApiRedditCall
-from preprocessor import Preprocessor
+from yana.data.api_reddit_call import ApiRedditCall
+from yana.data.preprocessor import Preprocessor
 
 from yana.params import *
 class Data :
@@ -85,6 +85,3 @@ class Data :
         df_comments.to_csv('yana/data/comments.csv', index=False)
 
         return df_posts, df_comments
-if __name__ == '__main__':
-    data = Data()
-    data.save_as_csv()
