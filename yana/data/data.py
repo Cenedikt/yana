@@ -1,5 +1,6 @@
 import pandas as pd
 import pandas_gbq
+import os
 from colorama import Fore, Style
 
 from api_reddit_call import ApiRedditCall
@@ -71,3 +72,11 @@ class Data :
 
         print(f"✅ Data has been loaded from bigquery")
         return df
+
+    def save_as_csv(self):
+        path= os.path.join('yana','data')
+        df_posts = self.load_posts()
+        df_comments = self.load_comments()
+
+        df_posts.to_csv('yana/data/posts.csv', index=False)
+        df_comments.to_csv('yana/data/comments.csv', index=False)
