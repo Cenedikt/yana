@@ -77,11 +77,11 @@ class Model1_1():
 
         with open(absolute_path_csv, 'r') as file:
             data = pd.read_csv(file)
-            posts = data['clean_text'].astype('string')
+            posts = data[['id','author','title','selftext','subreddit','ups']]
 
             for i,k in enumerate(pred[0]):
                 #print(k)
-                search_results.append(k['corpus_id'])
+                search_results.append(posts[k['corpus_id']].to_dict())
                 print(f"{i+1}: {posts[k['corpus_id']]}")
                 print('\n')
 
