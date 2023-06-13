@@ -9,15 +9,11 @@ import os
 # Get the current directory path
 current_dir = os.path.dirname(os.path.realpath(__file__))
 # Define the relative path to your file
-relative_path_embedding_pt = '../yana/data/embedding.pt'
+relative_path_embedding_pt = "./data/embedding.pt"
 # Get the absolute path
-relative_path_csv = 'yana/data/depression_dataset_reddit_cleaned.csv'
-
+relative_path_csv = "./data/depression_dataset_reddit_cleaned.csv"
 absolute_path_csv = os.path.abspath(os.path.join(current_dir, relative_path_csv))
-
 absolute_path = os.path.abspath(os.path.join(current_dir, relative_path_embedding_pt))
-# Use the absolute path in the save function
-# torch.save(embedded, absolute_path)
 
 
 class Model1_1():
