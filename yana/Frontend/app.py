@@ -4,6 +4,8 @@ import requests
 import time
 import base64
 import json
+from params import *
+
 
 from yana.http_encoder import http_encoder
 
@@ -14,6 +16,7 @@ parent_dir = os.path.dirname(os.path.dirname(script_path))
 yana_logo_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Yana_logo.png')
 yana_background_path = os.path.join(parent_dir, 'Frontend', 'Content', 'yana_background.jpeg')
 bukhari_script_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Bukhari_Script.ttf')
+base_url = GCR_API_URL
 
 # Call st.set_page_config() as the first Streamlit command
 st.set_page_config(page_title='YANA', page_icon=yana_logo_path)
@@ -131,7 +134,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
-            url = 'http://0.0.0.0:8890/query_1'
+            url = base_url + '/query_1'
             params =  {'query' : http_encoder(query)}
 
             response = requests.get(url, params=params)
@@ -184,7 +187,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query2/"
-            url = 'http://0.0.0.0:8890/query_2'
+            url = base_url + '/query_2'
             params =  {'query' : http_encoder(query)}
 
             response = requests.get(url, params=params)
