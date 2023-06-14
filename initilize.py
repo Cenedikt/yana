@@ -7,4 +7,4 @@ df_posts, df_comments = data.save_as_csv()
 
 model = Model1_1()
 
-model.embed(df_posts)
+model.embed(df_posts, save=True)

@@ -22,29 +22,34 @@ class ApiRedditCall :
         '''
         print(f'start scraping the data from reddit.....')
         posts = {}
+
+        index = 0
+
         for subreddit in self.subreddits:
-            print(f'start scraping the data from reddit from the subreddit {subreddit}.....')
-            subreddit_request = self.reddit.subreddit(subreddit)
-            subreddit_request
+            try:
+                print(f'start scraping the data from reddit from the subreddit {subreddit}.....')
+                subreddit_request = self.reddit.subreddit(subreddit)
+                subreddit_request
 
-            submissons = subreddit_request.top(limit=1000)
+                submissons = subreddit_request.top(limit=1000)
 
-            index = 0
+                columns=['id','author','title','subreddit','selftext','ups','permalink']
 
-            columns=['id','author','title','subreddit','selftext','ups','permalink']
+                for post in submissons :
+                    posts[index]= [
+                        post.id,
+                        post.author,
+                        post.title,
+                        post.subreddit.display_name,
+                        post.selftext,
+                        post.ups,
+                        post.permalink
+                    ]
+                    index +=1
+                print(f"✅ Data has been scrapped from the subreddit {subreddit}")
+            except:
+                print(f'subreddit not acessable')
 
-            for post in submissons :
-                posts[index]= [
-                    post.id,
-                    post.author,
-                    post.title,
-                    post.subreddit.display_name,
-                    post.selftext,
-                    post.ups,
-                    post.permalink
-                ]
-                index +=1
-            print(f"✅ Data has been scrapped from the subreddit {subreddit}")
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
 
         self.get_used_requests()
