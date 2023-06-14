@@ -1,10 +1,7 @@
 import streamlit as st
 import os
 import requests
-import time
 import base64
-import json
-from yana.params import *
 
 from yana.http_encoder import http_encoder
 
@@ -15,7 +12,7 @@ parent_dir = os.path.dirname(os.path.dirname(script_path))
 yana_logo_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Yana_logo.png')
 yana_background_path = os.path.join(parent_dir, 'Frontend', 'Content', 'yana_background.jpeg')
 bukhari_script_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Bukhari_Script.ttf')
-base_url = GCR_API_URL
+base_url = 'https://yanaimage-pg2zxhxypa-ey.a.run.app'
 
 # Call st.set_page_config() as the first Streamlit command
 st.set_page_config(page_title='YANA', page_icon=yana_logo_path)
