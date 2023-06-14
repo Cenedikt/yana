@@ -3,8 +3,8 @@ import pandas_gbq
 import os
 from colorama import Fore, Style
 
-from yana.data.api_reddit_call import ApiRedditCall
-from yana.data.preprocessor import Preprocessor
+from yana.data_logic.api_reddit_call import ApiRedditCall
+from yana.data_logic.preprocessor import Preprocessor
 
 from yana.params import *
 class Data :

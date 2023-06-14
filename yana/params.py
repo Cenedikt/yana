@@ -11,4 +11,6 @@ BQ_DATASET= os.environ.get('BQ_DATASET')
 BQ_REGION = os.environ.get("BQ_REGION")
 
 #################### Constant ####################
-SUBREDDITS = ['whatsbotheringyou']
+SUBREDDITS = ['whatsbotheringyou','TwoXADHD','traumatoolbox',
+              'Tourettes','SuicideWatch','StopSelfHarm',
+              'StopDipping','socialwork']
