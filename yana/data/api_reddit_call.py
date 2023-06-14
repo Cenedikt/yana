@@ -60,7 +60,7 @@ class ApiRedditCall :
         Return: retursn a Dataframe with all the importen information of the Comment
         '''
         post = self.reddit.submission(id=post_id)
-        post.comments.replace_more(limit=None)
+        post.comments.replace_more(limit=10)
 
         comments = {}
         index = 0

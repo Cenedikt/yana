@@ -131,7 +131,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
-            url = 'http://localhost:8000/query_1'
+            url = 'http://0.0.0.0:8890/query_1'
             headers = {'Content-Type': 'application/json'}
             data = {"text": query}
             json_data = json.dumps(data)

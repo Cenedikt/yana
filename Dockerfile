@@ -16,6 +16,7 @@ COPY setup.py setup.py
 COPY yana/ yana/
 COPY scripts/ scripts/
 
+
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
@@ -25,4 +26,4 @@ RUN pip install .
 EXPOSE 8890
 
 # Run app.py when the container launches
-CMD uvicorn yana.api.api:app  --host 0.0.0.0 --port 8890
+CMD uvicorn yana.api.api_v2:app  --host 0.0.0.0 --port 8890
