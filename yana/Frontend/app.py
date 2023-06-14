@@ -2,9 +2,7 @@ import streamlit as st
 import os
 import requests
 import base64
-from streamlit_autorefresh import st_autorefresh
 
-st_autorefresh(5000)
 
 
 def http_encoder(sentence: str) -> str :
@@ -60,11 +58,11 @@ def set_background(png_file):
         font-size: 20px;
         font-weight: bold;
     }
-
+    #MainMenu {visibility: hidden; }
     footer {visibility: hidden;}
     </style>
     ''' % bin_str
-    #MainMenu {visibility: hidden; }
+
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
@@ -217,8 +215,6 @@ def main():
                     '''.format(result=result), unsafe_allow_html=True)
             else:
                 st.error("There was an error processing your query.")
-
-
 
 if __name__ == "__main__":
     main()

@@ -39,4 +39,3 @@ sentence-transformers #--upgrade
 # Others
 streamlit
 colorama
-streamlit_autorefresh
