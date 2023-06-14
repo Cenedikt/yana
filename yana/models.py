@@ -140,18 +140,20 @@ class Model1_2(Model1_1):
             #print(data)
 
 
-        #print(relevant_comments)
-        #print(relevant_comments_text)
-        context = ' '.join(relevant_comments_text)
-        print(prompt)
+        try:
+            context = ' '.join(relevant_comments_text)
+            print(prompt)
 
-        print('Initiating large language model...')
+            print('Initiating large language model...')
 
-        output = Model1_2.query_llm({
-    	"inputs": {
-    		"question": prompt,
-    		"context": context
-    	},
-    })
-        search_results.append({'advice': output["answer"]})
+            output = Model1_2.query_llm({
+            "inputs": {
+                "question": prompt,
+                "context": context
+                    },
+                })
+
+            search_results.append({'advice': output["answer"]})
+        except:
+            search_results.append({'advice': 'Unfortunately, there were no comments to these posts. No advice could be retrieved by our model'})
         return search_results
