@@ -4,8 +4,7 @@ import requests
 import time
 import base64
 import json
-from params import *
-
+from yana.params import *
 
 from yana.http_encoder import http_encoder
 
