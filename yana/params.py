@@ -14,4 +14,4 @@ GCR_API_URL = os.environ.get("GCR_API_URL")
 #################### Constant ####################
 SUBREDDITS = ['whatsbotheringyou','TwoXADHD','traumatoolbox',
               'Tourettes','SuicideWatch','StopSelfHarm',
-              'StopDipping','socialwork']
+              'StopDipping' ]
