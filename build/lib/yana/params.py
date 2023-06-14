@@ -12,4 +12,6 @@ BQ_REGION = os.environ.get("BQ_REGION")
 GCR_API_URL = os.environ.get("GCR_API_URL")
 
 #################### Constant ####################
-SUBREDDITS = ['whatsbotheringyou']
+SUBREDDITS = ['whatsbotheringyou','TwoXADHD','traumatoolbox',
+              'Tourettes','SuicideWatch','StopSelfHarm',
+              'StopDipping','socialwork']

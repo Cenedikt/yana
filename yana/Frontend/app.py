@@ -3,8 +3,18 @@ import os
 import requests
 import base64
 
-from yana.http_encoder import http_encoder
 
+
+def http_encoder(sentence: str) -> str :
+    '''
+    encodes the querry into http frindy format
+    takes : sentence as  string
+    return string
+    '''
+    words = sentence.split()
+    sentence = '%20'.join(words)
+
+    return sentence
 
 # Construct OS-agnostic paths & load images
 script_path = os.path.abspath(__file__)

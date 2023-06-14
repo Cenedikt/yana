@@ -9,7 +9,7 @@ model1_2 = Model1_2()
 
 @app.get('/query_2')
 def predict(query):
-    query = http_decoder(query)
+    query = http_decoder(query
     prediction = model1_2.advice(query)
     return {'text' : prediction}
 
