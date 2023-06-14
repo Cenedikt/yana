@@ -4,8 +4,7 @@ import requests
 import time
 import base64
 import json
-from params import *
-
+from yana.params import *
 
 from yana.http_encoder import http_encoder
 
@@ -134,7 +133,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
-            url = base_url + '/query_1'
+            url = f'{base_url}/query_1'
             params =  {'query' : http_encoder(query)}
 
             response = requests.get(url, params=params)
@@ -187,32 +186,26 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query2/"
-            url = base_url + '/query_2'
+            url = f'{base_url}/query_2'
             params =  {'query' : http_encoder(query)}
 
             response = requests.get(url, params=params)
 
             if response.status_code == 200:
-                results = response.json()
-                if results['text']:
-                    result = results['text'][0]  # Select the first result
-
-                    st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
-                    st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                    st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation:</h3></div>", unsafe_allow_html=True)
-
+                results, advice = response.json()
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
+                st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation:{advice}</h3></div>", unsafe_allow_html=True)
+                for result in results['text']:
                     st.markdown(f'''
                         <div class="result-card">
                             <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;">{result['author']}</span></p>
                             <p style="font-size: 20px;"><strong>📌 Title:</strong> <span style="font-size: 18px;">{result['title']}</span></p>
                             <p style="font-size: 20px;"><strong>📄 Post:</strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
                             <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit</strong> <span style="font-size: 18px;">{result['subreddit']}</span></p>
-                            <p style="font-size: 20px;"><strong>👍 Upvotes: </strong> <span style="font-size: 18px;">{result['ups']}</span></p>
                             <p style="font-size: 20px;"><strong>👩‍⚕️ AI Advice: </strong> <span style="font-size: 18px;">{result['advice']}</span></p>
                         </div>
-                    ''', unsafe_allow_html=True)
-                else:
-                    st.warning("No results found.")
+                    '''.format(result=result), unsafe_allow_html=True)
             else:
                 st.error("There was an error processing your query.")
 
