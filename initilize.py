@@ -1,5 +1,5 @@
 from yana.models import Model1_1
-from yana.data.data import Data
+from yana.data_logic.data import Data
 
 data = Data()
 
