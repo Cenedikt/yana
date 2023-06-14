@@ -22,14 +22,13 @@ class ApiRedditCall :
         '''
         print(f'start scraping the data from reddit.....')
         posts = {}
+        index = 0
         for subreddit in self.subreddits:
             print(f'start scraping the data from reddit from the subreddit {subreddit}.....')
             subreddit_request = self.reddit.subreddit(subreddit)
             subreddit_request
 
             submissons = subreddit_request.top(limit=1000)
-
-            index = 0
 
             columns=['id','author','title','subreddit','selftext','ups','permalink']
 
