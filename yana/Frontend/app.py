@@ -133,7 +133,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
-            url = base_url + '/query_1'
+            url = f'{base_url}/query_1'
             params =  {'query' : http_encoder(query)}
 
             response = requests.get(url, params=params)
@@ -186,7 +186,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query2/"
-            url = base_url + '/query_2'
+            url = f'{base_url}/query_2'
             params =  {'query' : http_encoder(query)}
 
             response = requests.get(url, params=params)
