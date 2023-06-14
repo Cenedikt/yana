@@ -22,6 +22,7 @@ class ApiRedditCall :
         '''
         print(f'start scraping the data from reddit.....')
         posts = {}
+
         index = 0
 
         for subreddit in self.subreddits:
@@ -48,6 +49,7 @@ class ApiRedditCall :
                 print(f"✅ Data has been scrapped from the subreddit {subreddit}")
             except:
                 print(f'subreddit not acessable')
+
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
 
         self.get_used_requests()
