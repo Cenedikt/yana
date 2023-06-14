@@ -194,7 +194,7 @@ def main():
                 print(results)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to our Model, the following Reddit posts are similar to your query:</h3></div>", unsafe_allow_html=True)
+                st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation:</h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     st.markdown(f'''
                         <div class="result-card">
