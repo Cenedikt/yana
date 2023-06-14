@@ -120,14 +120,30 @@ class Model1_2(Model1_1):
         prompt = f"The user describes the following mental health struggle: {user_query}. Given this described struggle, you will look for possible advice to give to the user from the context data, which is composed of several related posts from mental health subreddits"
         #prompt = 'Summarize the following reddit posts'
 
-        # Search for 10 closest matches
+        # Search for k closest matches
         model = Model1_1()
-        search_results = model.search(query=user_query,results=10)
+        search_results = model.search(query=user_query,results=3)
 
         # Retrieve comments of these posts and put them into the context
+
+        ids = []
+        for post in search_results:
+            ids.append(f't3_{post["id"]}')
+
+
+
         with open(absolute_path_comments, 'r') as file:
             data = pd.read_csv(file)
-        context = ' '.join(search_results)
+            print(data)
+            relevant_comments = data[data['post_id'].isin(ids)]
+            relevant_comments_text = relevant_comments['body']
+            #print(data)
+
+
+        #print(relevant_comments)
+        #print(relevant_comments_text)
+        context = ' '.join(relevant_comments_text)
+        print(context)
 
         print('Initiating large language model...')
 
@@ -138,4 +154,4 @@ class Model1_2(Model1_1):
     	},
     })
         print(output)
-        return output["answer"]
+        return search_results, output["answer"]

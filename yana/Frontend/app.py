@@ -1,9 +1,7 @@
 import streamlit as st
 import os
 import requests
-import time
 import base64
-import json
 
 from yana.http_encoder import http_encoder
 
@@ -14,6 +12,7 @@ parent_dir = os.path.dirname(os.path.dirname(script_path))
 yana_logo_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Yana_logo.png')
 yana_background_path = os.path.join(parent_dir, 'Frontend', 'Content', 'yana_background.jpeg')
 bukhari_script_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Bukhari_Script.ttf')
+base_url = 'https://yanaimage-pg2zxhxypa-ey.a.run.app'
 
 # Call st.set_page_config() as the first Streamlit command
 st.set_page_config(page_title='YANA', page_icon=yana_logo_path)
@@ -131,10 +130,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
-            url = 'http://0.0.0.0:8890/query_1'
-            headers = {'Content-Type': 'application/json'}
-            data = {"text": query}
-            json_data = json.dumps(data)
+            url = f'{base_url}/query_1'
             params =  {'query' : http_encoder(query)}
 
             response = requests.get(url, params=params)
@@ -148,11 +144,11 @@ def main():
                 for result in results['text']:
                     st.markdown(f'''
                         <div class="result-card">
-                            <h4>👤Username: {result['author']}</h4>
-                            <h4>📌Title: {result['title']}</h4>
-                            <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
-                            <h4>🇷🇪 Subreddit: {result['subreddit']}</h4>
-                            <h4>👍Upvotes: {result['ups']}</h4>
+                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;">{result['author']}</span></p>
+                            <p style="font-size: 20px;"><strong>📌 Title:</strong> <span style="font-size: 18px;">{result['title']}</span></p>
+                            <p style="font-size: 20px;"><strong>📄 Post:</strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
+                            <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit</strong> <span style="font-size: 18px;">{result['subreddit']}</span></p>
+                            <p style="font-size: 20px;"><strong>👍 Upvotes: </strong> <span style="font-size: 18px;">{result['ups']}</span></p>
                         </div>
                 '''.format(result=result), unsafe_allow_html=True)
 
@@ -186,38 +182,29 @@ def main():
     if mode == "Get Advice*":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query2/"
-            headers = {'Content-Type': 'application/json'}
-            data = {"text": query}
-            json_data = json.dumps(data)
+            #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query2/"
+            url = f'{base_url}/query_2'
+            params =  {'query' : http_encoder(query)}
 
-            response = requests.post(url, headers=headers, data=json_data)
+            response = requests.get(url, params=params)
 
             if response.status_code == 200:
-                results = response.json()
+                results, advice = response.json()
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown("<h3 style='text-align: center;'>According to our Model, here is the advice:</h3>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation:{advice}</h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
-                    author = result['Author']
-                    title = result['Title']
-                    body = result['Body']
-                    subreddit = result['Subreddit']
-                    upvotes = result['Upvotes']
-
-                    st.markdown('''
+                    st.markdown(f'''
                         <div class="result-card">
-                            <p style="font-size: 20px;"><strong>👤Username: </strong> <span style="font-size: 18px;">{author}</span></p>
-                            <p style="font-size: 20px;"><strong>📌Title: </strong> <span style="font-size: 18px;">{title}</span></p>
-                            <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{body}</span></p>
-                            <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit: </strong> <span style="font-size: 18px;">{subreddit}</span></p>
-                            <p style="font-size: 20px;"><strong>👍Upvotes: </strong> <span style="font-size: 18px;">{upvotes}</span></p>
+                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;">{result['author']}</span></p>
+                            <p style="font-size: 20px;"><strong>📌 Title:</strong> <span style="font-size: 18px;">{result['title']}</span></p>
+                            <p style="font-size: 20px;"><strong>📄 Post:</strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
+                            <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit</strong> <span style="font-size: 18px;">{result['subreddit']}</span></p>
+                            <p style="font-size: 20px;"><strong>👩‍⚕️ AI Advice: </strong> <span style="font-size: 18px;">{result['advice']}</span></p>
                         </div>
-                    '''.format(author=result['Author'], title=result['Title'], body=result['Body'], subreddit=result['Subreddit'], upvotes=result['Upvotes']), unsafe_allow_html=True)
-
+                    '''.format(result=result), unsafe_allow_html=True)
             else:
                 st.error("There was an error processing your query.")
-
 
 if __name__ == "__main__":
     main()
