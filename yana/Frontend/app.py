@@ -90,9 +90,9 @@ def main():
         padding: 20px;
         border-radius: 10px;
         color: #F6F3E4;
-        box-shadow: 0 0 20px rgba(255, 83, 100, 0.6),
-                    0 0 30px rgba(255, 83, 100, 0.4),
-                    0 0 40px rgba(255, 83, 100, 0.2);
+        box-shadow: 0 0 20px rgba(86, 197, 165, 0.6),
+                    0 0 30px rgba(86, 197, 165, 0.4),
+                    0 0 40px rgba(86, 197, 165, 0.2);
     }
     .results-box {
         background-color: rgba(255, 83, 100, 0.5);  /* Set the background color to #BFD786 with 0.1 transparency */
@@ -109,8 +109,9 @@ def main():
         padding: 20px;
         border-radius: 10px;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         color: #F6F3E4;
+        backdrop-filter: blur(5px);
         box-shadow: 0 0 20px rgba(255, 83, 100, 0.6),
                     0 0 30px rgba(255, 83, 100, 0.4),
                     0 0 40px rgba(255, 83, 100, 0.2);
@@ -122,7 +123,7 @@ def main():
 
     # Display the title with the Bukhari Script font
     st.markdown("<div class='title-box'><h1 style='text-align: center; margin-bottom: 55px;'> Yana - you are not alone</h1></div>", unsafe_allow_html=True)
-    st.markdown("<div class='description-box' style='background-color: rgba(255, 83, 100, 0.5); padding: 20px; border-radius: 10px; color: #F6F3E4; backdrop-filter: blur(5px); margin-bottom: 20px;'><h3 style='text-align: center; color: #F6F3E4; text-shadow: none;'>Welcome to our Mental Health Platform powered by Natural Language Processing</h3><p style='text-align: center; font-size: 18px; color: #F6F3E4; text-shadow: none;'><strong>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</strong></p></div>", unsafe_allow_html=True)
+    st.markdown("<div class='description-box' style='background-color: rgba(86, 197, 165, 0.65); padding: 20px; border-radius: 10px; color: #F6F3E4; backdrop-filter: blur(5px); margin-bottom: 20px;'><h3 style='text-align: center; color: #F6F3E4; text-shadow: none;'>Welcome to our Mental Health Platform powered by Natural Language Processing</h3><p style='text-align: center; font-size: 18px; color: #F6F3E4; text-shadow: none;'><strong>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</strong></p></div>", unsafe_allow_html=True)
 
     mode = st.radio("Select an option:", ["Fetch Similar Reddit Posts", "Get Advice*"])
 
@@ -144,10 +145,10 @@ def main():
                 for result in results['text']:
                     st.markdown(f'''
                         <div class="result-card">
-                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;">{result['author']}</span></p>
-                            <p style="font-size: 20px;"><strong>📌 Title:</strong> <span style="font-size: 18px;">{result['title']}</span></p>
-                            <p style="font-size: 20px;"><strong>📄 Post:</strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
-                            <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit</strong> <span style="font-size: 18px;">{result['subreddit']}</span></p>
+                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #DF4D60; font-weight: bold;">u/{result['author']}</a></span></p>
+                            <p style="font-size: 20px;"><strong><span style="font-size: 25px;">{result['title']}</span></strong></p>
+                            <p style="font-size: 20px;"><strong></strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
+                            <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #DF4D60; font-weight: bold;">r/{result['subreddit']}</a></span></p>
                             <p style="font-size: 20px;"><strong>👍 Upvotes: </strong> <span style="font-size: 18px;">{result['ups']}</span></p>
                         </div>
                 '''.format(result=result), unsafe_allow_html=True)
@@ -192,15 +193,15 @@ def main():
                 results = response.json()
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation:{results['text'][-1]['advice']}</h3></div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <span style='font-size: 28px; color: #DF4D60'>{results['text'][-1]['advice']}</span></h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     if len(result)>1:
                      st.markdown(f'''
                          <div class="result-card">
-                             <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;">{result['author']}</span></p>
-                             <p style="font-size: 20px;"><strong>📌 Title:</strong> <span style="font-size: 18px;">{result['title']}</span></p>
-                             <p style="font-size: 20px;"><strong>📄 Post:</strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
-                             <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit</strong> <span style="font-size: 18px;">{result['subreddit']}</span></p>
+                             <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #DF4D60; font-weight: bold;">u/{result['author']}</a></span></p>
+                             <p style="font-size: 20px;"><strong><span style="font-size: 25px;">{result['title']}</span></strong></p>
+                             <p style="font-size: 20px;"><strong></strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
+                             <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #DF4D60; font-weight: bold;">r/{result['subreddit']}</a></span></p>
                          </div>
                      '''.format(result=result), unsafe_allow_html=True)
                     else:
