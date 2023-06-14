@@ -192,11 +192,10 @@ def main():
             response = requests.get(url, params=params)
 
             if response.status_code == 200:
-                results = response.json()
-                print(results)
+                results, advice = response.json()
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation:</h3></div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation:{advice}</h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     st.markdown(f'''
                         <div class="result-card">
