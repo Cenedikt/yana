@@ -23,4 +23,4 @@ RUN pip install -r requirements.txt
 RUN pip install .
 
 # Run app.py when the container launches
-CMD uvicorn yana.api.api_v2:app  --host 0.0.0.0 --port $PORT
+CMD uvicorn yana.api.api:app  --host 0.0.0.0 --port $PORT
