@@ -153,8 +153,8 @@ class Model1_2(Model1_1):
             output = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input, then look through the Reddit posts and comments that are given to you, and propose any advice or solutions that are mentioned by other users. Only use the content provided to provide advice."},
-                {"role": "user",  "content": f"Here is my issue: {user_query}"},
+                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input, then look through the Reddit posts and comments that are given to you, and propose any advice or solutions that are mentioned by other users. Only use the content provided to provide advice, and keep answers short, to a maximum of 50 words."},
+                {"role": "user",  "content": f"Here is my issue: {user_query}. Please extract a short piece of advice, maximum 50 words, from the comments provided"},
                 {"role": "assistant", "content": f"Here are the comments of posts that are similar to the user's issue:{context_truncated}"}
             ]
             )
@@ -165,7 +165,7 @@ class Model1_2(Model1_1):
             output = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input. Since there are no comments from similar posts, you will provide a comforting message and suggest ways to get help."},
+                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input. Since there are no comments from similar posts, you will say that there were not enough comments. Instead you will provide a comforting message and suggest ways to get help."},
                 {"role": "user",  "content": f"Here is my issue: {user_query}"},
             ]
             )
