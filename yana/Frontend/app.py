@@ -3,8 +3,18 @@ import os
 import requests
 import base64
 
-from yana.http_encoder import http_encoder
 
+
+def http_encoder(sentence: str) -> str :
+    '''
+    encodes the querry into http frindy format
+    takes : sentence as  string
+    return string
+    '''
+    words = sentence.split()
+    sentence = '%20'.join(words)
+
+    return sentence
 
 # Construct OS-agnostic paths & load images
 script_path = os.path.abspath(__file__)
@@ -12,7 +22,7 @@ parent_dir = os.path.dirname(os.path.dirname(script_path))
 yana_logo_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Yana_logo.png')
 yana_background_path = os.path.join(parent_dir, 'Frontend', 'Content', 'yana_background.jpeg')
 bukhari_script_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Bukhari_Script.ttf')
-base_url = 'http://127.0.0.1:8000'#https://yanaimage-pg2zxhxypa-ey.a.run.app'
+base_url = 'https://yanaimage-pg2zxhxypa-ey.a.run.app'
 
 # Call st.set_page_config() as the first Streamlit command
 st.set_page_config(page_title='YANA', page_icon=yana_logo_path)
@@ -48,7 +58,6 @@ def set_background(png_file):
         font-size: 20px;
         font-weight: bold;
     }
-    #MainMenu {visibility: hidden; }
     footer {visibility: hidden;}
     </style>
     ''' % bin_str
@@ -128,7 +137,6 @@ def main():
     if mode == "Fetch Similar Reddit Posts":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
             url = f'{base_url}/query_1'
             params =  {'query' : http_encoder(query)}
 
@@ -136,17 +144,16 @@ def main():
 
             if response.status_code == 200:
                 results = response.json()
-                print(results)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
                 st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to our Model, the following Reddit posts are similar to your query:</h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     st.markdown(f'''
                         <div class="result-card">
-                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #DF4D60; font-weight: bold;">u/{result['author']}</a></span></p>
+                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">u/{result['author']}</a></span></p>
                             <p style="font-size: 20px;"><strong><span style="font-size: 25px;">{result['title']}</span></strong></p>
                             <p style="font-size: 20px;"><strong></strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
-                            <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #DF4D60; font-weight: bold;">r/{result['subreddit']}</a></span></p>
+                            <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">r/{result['subreddit']}</a></span></p>
                             <p style="font-size: 20px;"><strong>👍 Upvotes: </strong> <span style="font-size: 18px;">{result['ups']}</span></p>
                         </div>
                 '''.format(result=result), unsafe_allow_html=True)
@@ -154,34 +161,10 @@ def main():
             else:
                 st.error("There was an error processing your query.")
 
-            # if response.status_code == 200:
-            #     results = response.json()
-            #     st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
-            #     st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-            #     st.markdown("<h3 style='text-align: center;'>According to our Model, the following Reddit posts are similar to your query:</h3>", unsafe_allow_html=True)
-            #     for result in results['text']:
-            #         author = result['Author']
-            #            title = result['Title']
-            #            body = result['Body']
-            #            subreddit = result['Subreddit']
-            #            upvotes = result['Upvotes']
-
-            #         st.markdown('''
-            #             <div class="result-card">
-            #                 <p style="font-size: 20px;"><strong>👤Username: </strong> <span style="font-size: 18px;">{author}</span></p>
-            #                 <p style="font-size: 20px;"><strong>📌Title: </strong> <span style="font-size: 18px;">{title}</span></p>
-            #                 <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{body}</span></p>
-            #                 <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit: </strong> <span style="font-size: 18px;">{subreddit}</span></p>
-            #                 <p style="font-size: 20px;"><strong>👍Upvotes: </strong> <span style="font-size: 18px;">{upvotes}</span></p>
-            #             </div>
-            #         '''.format(author=result['Author'], title=result['Title'], body=result['Body'], subreddit=result['Subreddit'], upvotes=result['Upvotes']), unsafe_allow_html=True)
-            # else:
-            #     st.error("There was an error processing your query.")
 
     if mode == "Get Advice*":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query2/"
             url = f'{base_url}/query_2'
             params =  {'query' : http_encoder(query)}
 
@@ -191,15 +174,15 @@ def main():
                 results = response.json()
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <span style='font-size: 28px; color: #DF4D60'>{results['text'][-1]['advice']}</span></h3></div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <br> <span style='font-size: 28px; color: #B375A1; text-shadow: rgb(179, 117, 161, 06)'>{results['text'][-1]['advice']}</span></h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     if len(result)>1:
                      st.markdown(f'''
                          <div class="result-card">
-                             <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #DF4D60; font-weight: bold;">u/{result['author']}</a></span></p>
+                             <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">u/{result['author']}</a></span></p>
                              <p style="font-size: 20px;"><strong><span style="font-size: 25px;">{result['title']}</span></strong></p>
                              <p style="font-size: 20px;"><strong></strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
-                             <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #DF4D60; font-weight: bold;">r/{result['subreddit']}</a></span></p>
+                             <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">r/{result['subreddit']}</a></span></p>
                          </div>
                      '''.format(result=result), unsafe_allow_html=True)
                     else:

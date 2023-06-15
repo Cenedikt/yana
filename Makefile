@@ -59,3 +59,6 @@ pypi:
 #-------------------------------------
 initilize :
 	@python initilize.py
+
+scrap :
+	@python scrap.py
