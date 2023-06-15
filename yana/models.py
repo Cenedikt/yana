@@ -5,6 +5,7 @@ import json
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import semantic_search, torch
 import os
+import openai
 
 # Get the current directory path
 current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -137,23 +138,37 @@ class Model1_2(Model1_1):
             data = pd.read_csv(file)
             relevant_comments = data[data['post_id'].isin(ids)]
             relevant_comments_text = relevant_comments['body']
+            context = ' '.join(relevant_comments_text)
             #print(data)
 
 
-        try:
-            context = ' '.join(relevant_comments_text)
+        if context != '':
+
             print(prompt)
 
             print('Initiating large language model...')
 
-            output = Model1_2.query_llm({
-            "inputs": {
-                "question": prompt,
-                "context": context
-                    },
-                })
+            openai.api_key = os.getenv("OPENAI_API_KEY")
+            context_truncated = context[:5000]
+            output = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input, then look through the Reddit posts and comments that are given to you, and propose any advice or solutions that are mentioned by other users. Only use the content provided to provide advice."},
+                {"role": "user",  "content": f"Here is my issue: {user_query}"},
+                {"role": "assistant", "content": f"Here are the comments of posts that are similar to the user's issue:{context_truncated}"}
+            ]
+            )
 
-            search_results.append({'advice': output["answer"]})
-        except:
-            search_results.append({'advice': 'Unfortunately, there were no comments to these posts. No advice could be retrieved by our model'})
+
+            search_results.append({'advice': output.choices[0].message['content']})
+        else:
+            output = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input. Since there are no comments from similar posts, you will provide a comforting message and suggest ways to get help."},
+                {"role": "user",  "content": f"Here is my issue: {user_query}"},
+            ]
+            )
+
+            search_results.append({'advice': output.choices[0].message['content']})
         return search_results

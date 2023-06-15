@@ -25,6 +25,7 @@ praw
 fastapi
 uvicorn
 httpx
+openai
 
 # utilities
 six>=1.14
