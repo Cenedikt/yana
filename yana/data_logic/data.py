@@ -54,7 +54,7 @@ class Data :
         makes an api request to get comments and saves the data into BiQuerry
         '''
         print(f'start saving the Data.....')
-        df_post_id = self.get_post_id()
+        df_post_id = self.get_post_id().iloc[0:300,:]
         df = pd.DataFrame()
         progress_bar = tqdm(total=df_post_id.shape[0], unit='iteration')
 
@@ -64,8 +64,8 @@ class Data :
             df = pd.concat([df,df_], ignore_index=True)
             progress_bar.update(1)
         df = self.prep.preprocessor_comments(df)
-        #pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_comments}', project_id=self.gcp_project_id, if_exists='replace')
         progress_bar.close()
+        pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_comments}', project_id=self.gcp_project_id, if_exists='replace')
         print(f"✅ Data saved to bigquery")
 
 

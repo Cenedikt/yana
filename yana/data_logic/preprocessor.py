@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from colorama import Fore, Style
-
+from tqdm import tqdm
 
 class Preprocessor:
 
@@ -16,7 +16,9 @@ class Preprocessor:
             data: takes a DataFrame as an input
         return : returns an DataFrame
         '''
+        print()
         print(f'start cleaning data.....')
+        progress_bar = tqdm(total=data.shape[0], unit='iteration')
         for index, row in data.iterrows():
             selftext = row['selftext']
             title = row['title']
@@ -26,9 +28,11 @@ class Preprocessor:
                     data = data.drop(index)
             elif len(selftext) <= 72 :
                 data = data.drop(index)
-
-        print(f"✅ Data has been cleaned")
+            progress_bar.update(1)
+        progress_bar.close()
         data.author = data.author.map(lambda x : str(x))
+        print(f"✅ Data has been cleaned")
+
         return data
 
     def preprocessor_comments(self, data: pd.DataFrame) -> pd.DataFrame:
@@ -39,10 +43,13 @@ class Preprocessor:
         return : returns an DataFrame
         '''
         print(f'start cleaning data.....')
+        progress_bar = tqdm(total=data.shape[0], unit='iteration')
         for index, row in data.iterrows():
             body = row['body']
             if len(body) <= 72 :
                 data = data.drop(index)
+            progress_bar.update(1)
+        progress_bar.close()
         data.author = data.author.map(lambda x : str(x))
         print(f"✅ Data has been cleaned")
         return data
