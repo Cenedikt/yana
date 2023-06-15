@@ -178,7 +178,7 @@ def main():
 
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <br> <span style='font-size: 28px; color: #ffffff; text-shadow: rgb(179, 117, 161, 06)'><br>\"{advice}\"</span></h3></div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <br> <span style='font-size: 25px; color: #ffffff; text-shadow: rgb(179, 117, 161, 06)'><br>\"{advice}\"</span></h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     if len(result)>1:
                      st.markdown(f'''
