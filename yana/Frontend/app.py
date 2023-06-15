@@ -22,7 +22,7 @@ parent_dir = os.path.dirname(os.path.dirname(script_path))
 yana_logo_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Yana_logo.png')
 yana_background_path = os.path.join(parent_dir, 'Frontend', 'Content', 'yana_background.jpeg')
 bukhari_script_path = os.path.join(parent_dir, 'Frontend', 'Content', 'Bukhari_Script.ttf')
-base_url = 'http://127.0.0.1:8000'#https://yanaimage-pg2zxhxypa-ey.a.run.app'
+base_url = 'https://yanaimage-pg2zxhxypa-ey.a.run.app'
 
 # Call st.set_page_config() as the first Streamlit command
 st.set_page_config(page_title='YANA', page_icon=yana_logo_path)
@@ -152,10 +152,10 @@ def main():
                 for result in results['text']:
                     st.markdown(f'''
                         <div class="result-card">
-                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #DF4D60; font-weight: bold;">u/{result['author']}</a></span></p>
+                            <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">u/{result['author']}</a></span></p>
                             <p style="font-size: 20px;"><strong><span style="font-size: 25px;">{result['title']}</span></strong></p>
                             <p style="font-size: 20px;"><strong></strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
-                            <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #DF4D60; font-weight: bold;">r/{result['subreddit']}</a></span></p>
+                            <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">r/{result['subreddit']}</a></span></p>
                             <p style="font-size: 20px;"><strong>👍 Upvotes: </strong> <span style="font-size: 18px;">{result['ups']}</span></p>
                         </div>
                 '''.format(result=result), unsafe_allow_html=True)
@@ -200,15 +200,15 @@ def main():
                 results = response.json()
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <span style='font-size: 28px; color: #DF4D60'>{results['text'][-1]['advice']}</span></h3></div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <span style='font-size: 28px; color: #B375A1; text-shadow: rgb(179, 117, 161, 06)'>{results['text'][-1]['advice']}</span></h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     if len(result)>1:
                      st.markdown(f'''
                          <div class="result-card">
-                             <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #DF4D60; font-weight: bold;">u/{result['author']}</a></span></p>
+                             <p style="font-size: 20px;"><strong>👤 Username:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/user/{result['author']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">u/{result['author']}</a></span></p>
                              <p style="font-size: 20px;"><strong><span style="font-size: 25px;">{result['title']}</span></strong></p>
                              <p style="font-size: 20px;"><strong></strong> <span style="font-size: 18px;">{result['selftext']}</span></p>
-                             <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #DF4D60; font-weight: bold;">r/{result['subreddit']}</a></span></p>
+                             <p style="font-size: 20px;"><strong>🤖 Subreddit:</strong> <span style="font-size: 18px;"><a href="https://www.reddit.com/r/{result['subreddit']}" target="_blank" style="color: #B375A1; text-shadow: rgb(179, 117, 161, 06); font-weight: bold;">r/{result['subreddit']}</a></span></p>
                          </div>
                      '''.format(result=result), unsafe_allow_html=True)
                     else:
