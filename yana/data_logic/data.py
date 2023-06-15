@@ -2,6 +2,7 @@ import pandas as pd
 import pandas_gbq
 import os
 from colorama import Fore, Style
+from tqdm import tqdm
 
 from yana.data_logic.api_reddit_call import ApiRedditCall
 from yana.data_logic.preprocessor import Preprocessor
@@ -24,7 +25,7 @@ class Data :
         print(f'start saving the Data.....')
         df = self.api_call.get_posts()
         df = self.prep.preprocessor_post(df)
-        pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_posts}', project_id=self.gcp_project_id, if_exists='replace')
+        #pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_posts}', project_id=self.gcp_project_id, if_exists='replace')
         print(f"✅ Data saved to bigquery")
 
     def load_posts(self)->pd.DataFrame:
@@ -53,15 +54,20 @@ class Data :
         makes an api request to get comments and saves the data into BiQuerry
         '''
         print(f'start saving the Data.....')
-        df_post_id = self.get_post_id()
+        df_post_id = self.get_post_id().iloc[0:300,:]
         df = pd.DataFrame()
+        progress_bar = tqdm(total=df_post_id.shape[0], unit='iteration')
+
         for index, row in df_post_id.iterrows():
             id = row['id']
             df_ = self.api_call.get_commets(id)
-            df = pd.concat((df,df_), ignore_index=True)
+            df = pd.concat([df,df_], ignore_index=True)
+            progress_bar.update(1)
         df = self.prep.preprocessor_comments(df)
+        progress_bar.close()
         pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_comments}', project_id=self.gcp_project_id, if_exists='replace')
         print(f"✅ Data saved to bigquery")
+
 
     def load_comments(self)->pd.DataFrame:
         '''

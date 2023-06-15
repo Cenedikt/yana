@@ -137,7 +137,6 @@ def main():
     if mode == "Fetch Similar Reddit Posts":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query/"
             url = f'{base_url}/query_1'
             params =  {'query' : http_encoder(query)}
 
@@ -145,7 +144,6 @@ def main():
 
             if response.status_code == 200:
                 results = response.json()
-                print(results)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
                 st.markdown("<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to our Model, the following Reddit posts are similar to your query:</h3></div>", unsafe_allow_html=True)
@@ -163,34 +161,10 @@ def main():
             else:
                 st.error("There was an error processing your query.")
 
-            # if response.status_code == 200:
-            #     results = response.json()
-            #     st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
-            #     st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-            #     st.markdown("<h3 style='text-align: center;'>According to our Model, the following Reddit posts are similar to your query:</h3>", unsafe_allow_html=True)
-            #     for result in results['text']:
-            #         author = result['Author']
-            #            title = result['Title']
-            #            body = result['Body']
-            #            subreddit = result['Subreddit']
-            #            upvotes = result['Upvotes']
-
-            #         st.markdown('''
-            #             <div class="result-card">
-            #                 <p style="font-size: 20px;"><strong>👤Username: </strong> <span style="font-size: 18px;">{author}</span></p>
-            #                 <p style="font-size: 20px;"><strong>📌Title: </strong> <span style="font-size: 18px;">{title}</span></p>
-            #                 <p style="font-size: 20px;"><strong>📄Post:</strong> <span style="font-size: 18px;">{body}</span></p>
-            #                 <p style="font-size: 20px;"><strong>/🇷🇪 Subreddit: </strong> <span style="font-size: 18px;">{subreddit}</span></p>
-            #                 <p style="font-size: 20px;"><strong>👍Upvotes: </strong> <span style="font-size: 18px;">{upvotes}</span></p>
-            #             </div>
-            #         '''.format(author=result['Author'], title=result['Title'], body=result['Body'], subreddit=result['Subreddit'], upvotes=result['Upvotes']), unsafe_allow_html=True)
-            # else:
-            #     st.error("There was an error processing your query.")
 
     if mode == "Get Advice*":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
-            #url = "https://yanaapii-pg2zxhxypa-ey.a.run.app/query2/"
             url = f'{base_url}/query_2'
             params =  {'query' : http_encoder(query)}
 

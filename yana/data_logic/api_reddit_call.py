@@ -1,6 +1,7 @@
 import pandas as pd
 import praw
 from colorama import Fore, Style
+from tqdm import tqdm
 
 from yana.params import *
 
@@ -20,16 +21,16 @@ class ApiRedditCall :
         creates an API request to Reddit and scrabbes the Subbredit
         Return: returns a Df with the important information of the post
         '''
-        print(f'start scraping the data from reddit.....')
+        progress_bar = tqdm(total=len(self.subreddits), unit='iteration')
+        #print(f'start scraping the data from reddit.....')
         posts = {}
 
         index = 0
 
         for subreddit in self.subreddits:
             try:
-                print(f'start scraping the data from reddit from the subreddit {subreddit}.....')
+                #print(f'start scraping the data from reddit from the subreddit {subreddit}.....')
                 subreddit_request = self.reddit.subreddit(subreddit)
-                subreddit_request
 
                 submissons = subreddit_request.top(limit=1000)
 
@@ -46,15 +47,18 @@ class ApiRedditCall :
                         post.permalink
                     ]
                     index +=1
-                print(f"✅ Data has been scrapped from the subreddit {subreddit}")
+                    progress_bar.update(1)
+                #print(f"✅ Data has been scrapped from the subreddit {subreddit}")
             except:
-                print(f'subreddit not acessable')
+                progress_bar.update(1)
+                #print(f'subreddit not acessable')
 
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
 
-        self.get_used_requests()
+        #self.get_used_requests()
 
-        print(f"✅ Data has been scrapped")
+        #print(f"✅ Data has been scrapped")
+        progress_bar.close()
         return df
 
     def get_commets(self, post_id: str) -> pd.DataFrame :
@@ -64,28 +68,30 @@ class ApiRedditCall :
             post_id: takes the id of a post as a String
         Return: retursn a Dataframe with all the importen information of the Comment
         '''
-        post = self.reddit.submission(id=post_id)
-        post.comments.replace_more(limit=10)
-
         comments = {}
         index = 0
         columns=['id','author','body','ups','post_id']
+        try:
+            #print(f'start scraping commentsfrom Post {post_id}')
+            post = self.reddit.submission(id=post_id)
+            post.comments.replace_more(limit=10)
 
-        for comment in post.comments.list():
-            comments[index] = [
-                comment.id,
-                comment.author,
-                comment.body,
-                comment.ups,
-                comment.link_id
-                ]
-            index +=1
-
+            for comment in post.comments.list():
+                comments[index] = [
+                    comment.id,
+                    comment.author,
+                    comment.body,
+                    comment.ups,
+                    comment.link_id
+                    ]
+                index +=1
+            #print(f'✅ comments has been scraped from the post {post_id}')
+        except:
+            print(f'no comment for the post {post_id}')
         df = pd.DataFrame.from_dict(comments,orient='index' ,columns=columns)
 
-        self.get_used_requests()
-
-        return df,
+        #self.get_used_requests()
+        return df
 
     def get_used_requests(self)->int:
         used_requests = self.reddit.auth.limits['used']
