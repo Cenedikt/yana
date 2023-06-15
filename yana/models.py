@@ -27,11 +27,14 @@ class Model1_1():
     '''This class is an adaptation of the SentenceTransformer library for our purposes'''
 
     # Here are the different transformers we can use; for now, we can use fast and best
-    fast = 'sentence-transformers/all-MiniLM-L6-v2'
-    best = 'sentence-transformers/all-mpnet-base-v2'
 
     # Model initialization
-    def __init__(self, model = fast) -> None:
+    def __init__(self, mode = 'fast') -> None:
+        if mode == 'fast' :
+            model = 'sentence-transformers/all-MiniLM-L6-v2'
+        elif mode == 'best':
+            model = 'sentence-transformers/all-mpnet-base-v2'
+
         self.model = SentenceTransformer(model)
         return None
 
