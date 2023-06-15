@@ -16,6 +16,10 @@ def http_encoder(sentence: str) -> str :
 
     return sentence
 
+def advice_fix (advice: str) ->str:
+    return advice.replace("\n", "<br>")
+
+
 # Construct OS-agnostic paths & load images
 script_path = os.path.abspath(__file__)
 parent_dir = os.path.dirname(os.path.dirname(script_path))
@@ -130,10 +134,8 @@ def main():
 
     # Display the title with the Bukhari Script font
     st.markdown("<div class='title-box'><h1 style='font-size: 55px; text-align: center; margin-bottom: 55px;'> Yana - you are not alone</h1></div>", unsafe_allow_html=True)
-    st.markdown("<div class='description-box' style='background-color: rgba(86, 197, 165, 0.65); padding: 20px; border-radius: 10px; color: #F6F3E4; backdrop-filter: blur(5px); margin-bottom: 20px;'><h3 style='text-align: center; color: #F6F3E4; text-shadow: 2px 2px 1px rgba(86, 197, 165, 0.8);'>Welcome to our Mental Health Platform powered by Natural Language Processing</h3><p style='text-align: center; font-size: 18px; color: #F6F3E4; text-shadow: 2px 2px 1px rgba(86, 197, 165, 0.8);'><strong>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.</strong></p></div>", unsafe_allow_html=True)
-
+    st.markdown("<div class='description-box' style='background-color: rgba(86, 197, 165, 0.65); padding: 20px; border-radius: 10px; color: #F6F3E4; backdrop-filter: blur(5px); margin-bottom: 20px;'><h3 style='text-align: center; color: #F6F3E4; text-shadow: 2px 2px 1px rgba(86, 197, 165, 0.8);'>Welcome to our Mental Health Platform powered by Natural Language Processing</h3><p style='text-align: center; font-size: 18px; color: #F6F3E4; text-shadow: 2px 2px 1px rgba(86, 197, 165, 0.8);'><strong>We use advanced technology to analyze data from popular mental health subreddits and provide valuable insights. Our platform connects individuals with similar needs, fostering a sense of community and support. We offer community-assessed solutions and a comprehensive overview of prevalent mental health struggles. Join us as we leverage technology and shared experiences to create a more empathetic and inclusive mental health landscape.<br><br>Usage: briefly describe your issue in the text box below and click submit, and our model will fetch posts where similar situations are described. In the advice mode, a large language model will also provide some advice based on the comments. <span style='font-size: 16px;'><br><br>*Disclaimer: Our platform provides valuable insights and fosters community support for mental health, but it is not a substitute for professional medical advice. We strongly encourage users to seek the guidance of qualified healthcare professionals for personalized diagnosis, treatment, and support.</span> </strong></p></div>", unsafe_allow_html=True)
     mode = st.radio("Select an option:", ["Fetch Similar Reddit Posts", "Get Advice*"])
-
     if mode == "Fetch Similar Reddit Posts":
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
@@ -172,9 +174,11 @@ def main():
 
             if response.status_code == 200:
                 results = response.json()
+                advice = advice_fix(results['text'][-1]['advice'])
+
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 14px; }</style>", unsafe_allow_html=True)
                 st.write("<style>div[role='main'] div[data-testid='stDecoration'] { font-size: 18px; }</style>", unsafe_allow_html=True)
-                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <br> <span style='font-size: 28px; color: #B375A1; text-shadow: rgb(179, 117, 161, 06)'>{results['text'][-1]['advice']}</span></h3></div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-card'><h3 style='text-align: center; color: #F6F3E4;'>According to other Redditors, the following advice is considered the most suitable by our Model for your situation: <br> <span style='font-size: 28px; color: #ffffff; text-shadow: rgb(179, 117, 161, 06)'><br>\"{advice}\"</span></h3></div>", unsafe_allow_html=True)
                 for result in results['text']:
                     if len(result)>1:
                      st.markdown(f'''
