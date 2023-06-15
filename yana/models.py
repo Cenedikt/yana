@@ -93,6 +93,7 @@ class Model1_1():
                 print(f"{i+1}: {posts.iloc[k['corpus_id'],0:]}")
                 print('\n')
 
+        print(query)
         return search_results
 
 
@@ -134,24 +135,25 @@ class Model1_2(Model1_1):
 
         with open(absolute_path_comments, 'r') as file:
             data = pd.read_csv(file)
-            print(data)
             relevant_comments = data[data['post_id'].isin(ids)]
             relevant_comments_text = relevant_comments['body']
             #print(data)
 
 
-        #print(relevant_comments)
-        #print(relevant_comments_text)
-        context = ' '.join(relevant_comments_text)
-        print(context)
+        try:
+            context = ' '.join(relevant_comments_text)
+            print(prompt)
 
-        print('Initiating large language model...')
+            print('Initiating large language model...')
 
-        output = Model1_2.query_llm({
-    	"inputs": {
-    		"question": prompt,
-    		"context": context
-    	},
-    })
-        print(output)
-        return search_results, output["answer"]
+            output = Model1_2.query_llm({
+            "inputs": {
+                "question": prompt,
+                "context": context
+                    },
+                })
+
+            search_results.append({'advice': output["answer"]})
+        except:
+            search_results.append({'advice': 'Unfortunately, there were no comments to these posts. No advice could be retrieved by our model'})
+        return search_results

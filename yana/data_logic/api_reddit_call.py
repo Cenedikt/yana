@@ -24,6 +24,7 @@ class ApiRedditCall :
         progress_bar = tqdm(total=len(self.subreddits), unit='iteration')
         #print(f'start scraping the data from reddit.....')
         posts = {}
+
         index = 0
 
         for subreddit in self.subreddits:
@@ -51,6 +52,7 @@ class ApiRedditCall :
             except:
                 progress_bar.update(1)
                 #print(f'subreddit not acessable')
+
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
 
         #self.get_used_requests()
