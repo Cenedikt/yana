@@ -89,6 +89,22 @@ than run
 make scraper
 ```
 
+# For local test some helpuf commndas
+
+fist the some initialize has to be done
+the csv and emmbeding.pt will be created localy
+```bash
+make initialize
+```
+to start frontend
+```bash
+streamlit run
+```
+to start api
+```bash
+uvicorn yana.api.api:app --reload
+```
+
 # Docker set up
 
 befor bulding an image

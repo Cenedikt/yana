@@ -44,10 +44,10 @@ class ApiRedditCall :
                         post.permalink
                     ]
                     index +=1
-                    progress_bar.update(1)
-            except:
-                progress_bar.update(1)
 
+            except:
+                print('Subbredit dose not exist or is private')
+            progress_bar.update(1)
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
         progress_bar.close()
         print(f"✅ Post has been scrapped")

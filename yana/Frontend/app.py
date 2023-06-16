@@ -4,18 +4,6 @@ import requests
 import base64
 
 
-
-def http_encoder(sentence: str) -> str :
-    '''
-    encodes the querry into http frindy format
-    takes : sentence as  string
-    return string
-    '''
-    words = sentence.split()
-    sentence = '%20'.join(words)
-
-    return sentence
-
 def advice_fix (advice: str) ->str:
     return advice.replace("\n", "<br>")
 
@@ -140,7 +128,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             url = f'{base_url}/query_1'
-            params =  {'query' : http_encoder(query)}
+            params =  {'query' : query}
 
             response = requests.get(url, params=params)
 
@@ -168,7 +156,7 @@ def main():
         query = st.text_input("Enter your query:")
         if st.button("Submit"):
             url = f'{base_url}/query_2'
-            params =  {'query' : http_encoder(query)}
+            params =  {'query' : query}
 
             response = requests.get(url, params=params)
 
