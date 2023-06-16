@@ -1,8 +1,8 @@
 # Data analysis
 - Document here the project: yana
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+- Description: Mental Health Platform for finding people who went through similar experiences
+- Data Source: Reddit.com multiple subbrediits
+- Type of analysis: Semantic search
 
 Please document the project the better you can.
 
@@ -15,11 +15,6 @@ Create virtualenv and install the project:
 sudo apt-get install virtualenv python-pip python-dev
 deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
     pip install pip -U; pip install -r requirements.txt
-```
-
-Crating virtualenv with pyenv
-```bash
-pyenv install 3.11.3
 ```
 
 Unittest test:
@@ -66,7 +61,7 @@ Clone the project and install it:
 git clone git@github.com:Cenedikt/yana.git
 cd yana
 pip install -r requirements.txt
-make clean install test                # install and test
+make clean install test
 ```
 Functionnal test with a script:
 
@@ -76,3 +71,57 @@ mkdir tmp
 cd tmp
 yana-run
 ```
+## setup environment variable
+
+Locate the sample environment variable file in the repository. It is usually named something like .env.sample or .env.example.
+
+Open the sample environment variable file in a text editor.
+
+Review each variable name and its corresponding value. Pay attention to any potential spelling mistakes in the variable names or their values.
+
+Compare the variable names in the sample file with the expected variable names used in your application's code. Ensure that they match exactly, including any capitalization or underscores.
+
+Verify that the values assigned to the variables in the sample file are correct and match the expected format or content.
+
+If you encounter any spelling mistakes or incorrect variable names/values, correct them in the sample file.
+
+Save the changes to the sample environment variable file
+
+# Docker set up
+befor bulding an image
+## for Development
+
+build new docker image :
+```bash
+docker build -t $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:dev .
+```
+if needed test docker image localy:
+```bash
+docker run -e PORT=8000 -p 8000:8000 --env-file .env $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:dev
+```
+push image to GoogleCloud:
+```bash
+docker push $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:dev
+```
+Deploy the docker container on GoogleCloud:
+```bash
+gcloud run deploy --image $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:dev --memory $GCR_MEMORY --region $GCP_REGION --env-vars-file .env.yaml --project $GCP_PROJECT_ID
+```
+
+## for Production
+
+build new docker image :
+```bash
+docker build -t $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:prod .
+```
+if needed test docker image localy:
+```bash
+docker run -e PORT=8000 -p 8000:8000 --env-file .env $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:prod
+```
+push image to GoogleCloud:
+```bash
+docker push $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:prod
+```
+Deploy the docker container on GoogleCloud:
+```bash
+gcloud run deploy --image $GCR_REGION/$GCP_PROJECT_ID/$GCR_IMAGE:prod --memory $GCR_MEMORY --region $GCP_REGION --env-vars-file .env.yaml --project $GCP_PROJECT_ID

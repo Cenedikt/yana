@@ -5,11 +5,6 @@
 raw_data/
 *.csv
 **/__pycache__/
-*.env
-<<<<<<< HEAD
-*.pt
-.env.yaml
-=======
+.env
 .env.yaml
 *.pt
->>>>>>> 55cd957bb4a9d22f561f577cf17da19413d29340

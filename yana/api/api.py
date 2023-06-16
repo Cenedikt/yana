@@ -1,28 +1,35 @@
 from fastapi import FastAPI
-from yana.models import Model1_1, Model1_2
-from yana.http_encoder import http_decoder
+from yana.ml_logic.models import Model1_1, Model1_2
 
 app = FastAPI()
 
-model1_1 = Model1_1()
-model1_2 = Model1_2()
-
 @app.get('/query_2')
-def predict(query):
-    print(query)
-    query = http_decoder(query)
+def predict(query: str) -> dict:
+    '''
+    makes a prediction with the second Model
+    params: a querry
+    return a dict
+    '''
+    model1_2 = Model1_2()
     prediction = model1_2.advice(query)
-    print(prediction)
+
     return {'text' : prediction}
 
 @app.get('/query_1')
-def predict(query):
-    print(query)
-    query = http_decoder(query)
+def predict(query: str):
+    '''
+    makes a prediction withe fist Model
+    params: a querry
+    return a dict
+    '''
+    model1_1 = Model1_1()
     prediction = model1_1.search(query)
-    print(prediction)
+
     return {'text' : prediction}
 
 @app.get('/')
 def root ():
+    '''
+    default rout to see if api works
+    '''
     return {'test': 'HelloWorld'}

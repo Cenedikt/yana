@@ -18,7 +18,6 @@ yapf
 
 # API
 gcsfs
-google-cloud-storage
 google-cloud-bigquery
 s3fs
 praw
@@ -34,9 +33,7 @@ memoized-property
 termcolor
 
 # Model
-#
 sentence-transformers #--upgrade
 
 # Others
 streamlit
-colorama
