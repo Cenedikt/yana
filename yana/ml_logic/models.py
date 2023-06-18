@@ -11,16 +11,17 @@ import openai
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 # Define the relative path to your files
-relative_path_embedding_pt = "./data/embedding.pt"
-relative_path_posts = "./data/posts.csv"
-relative_path_comments = "./data/comments.csv"
+relative_path_embedding_pt = f'{os.path.join("..","data","embedding")}.pt'
+relative_path_posts = f'{os.path.join("..","data","posts")}.csv'
+relative_path_comments = f'{os.path.join("..","data","comments")}.csv'
 
 # Get the absolute path
-
-absolute_path_embeddings = os.path.abspath(os.path.join(current_dir, relative_path_embedding_pt))
-absolute_path_posts = os.path.abspath(os.path.join(current_dir, relative_path_posts))
-absolute_path_comments = os.path.abspath(os.path.join(current_dir, relative_path_comments))
-
+absolute_path_embeddings = os.path.abspath(
+    os.path.join(current_dir, relative_path_embedding_pt))
+absolute_path_posts = os.path.abspath(
+    os.path.join(current_dir, relative_path_posts))
+absolute_path_comments = os.path.abspath(
+    os.path.join(current_dir, relative_path_comments))
 
 
 class Model1_1():
@@ -29,8 +30,8 @@ class Model1_1():
     # Here are the different transformers we can use; for now, we can use fast and best
 
     # Model initialization
-    def __init__(self, mode = 'fast') -> None:
-        if mode == 'fast' :
+    def __init__(self, mode='fast') -> None:
+        if mode == 'fast':
             model = 'sentence-transformers/all-MiniLM-L6-v2'
         elif mode == 'best':
             model = 'sentence-transformers/all-mpnet-base-v2'
@@ -39,7 +40,7 @@ class Model1_1():
         return None
 
     # EMBED
-    def embed(self,data:pd.DataFrame|list|str, save = False):
+    def embed(self, data: pd.DataFrame | list | str, save=False):
         '''Method that embeds new text (either document corpus or queries) into the multidimensional vector space
 
         Args:
@@ -53,19 +54,17 @@ class Model1_1():
         else:
             df = data
 
-
-
-        embedded =  self.model.encode(df,show_progress_bar=True,convert_to_tensor=True)
+        embedded = self.model.encode(df,
+                                     show_progress_bar=True,
+                                     convert_to_tensor=True)
         print('✅ Your input has been embedded successfully!')
 
-
-
         if save == True:
-           torch.save(embedded, absolute_path_embeddings)
+            torch.save(embedded, absolute_path_embeddings)
         return embedded
 
     # SEARCH
-    def search(self, query:str, corpus_embeddings = None, results:int = 3):
+    def search(self, query: str, corpus_embeddings=None, results: int = 3):
         '''This is our main search method. Takes query, returns closest matches.
 
         Args:
@@ -80,18 +79,21 @@ class Model1_1():
 
             corpus_embeddings = torch.load(data)
 
-        query_embeddings = Model1_1.embed(self,query)
-        pred = semantic_search(query_embeddings=query_embeddings, corpus_embeddings=corpus_embeddings,top_k=results)
+        query_embeddings = Model1_1.embed(self, query)
+        pred = semantic_search(query_embeddings=query_embeddings,
+                               corpus_embeddings=corpus_embeddings,
+                               top_k=results)
 
         with open(absolute_path_posts, 'r') as file:
             data = pd.read_csv(file)
-            posts = data[['id','author','title','selftext','subreddit','ups']]
+            posts = data[[
+                'id', 'author', 'title', 'selftext', 'subreddit', 'ups'
+            ]]
 
-            for i,k in enumerate(pred[0]):
-                search_results.append(posts.iloc[k['corpus_id'],0:].to_dict())
+            for i, k in enumerate(pred[0]):
+                search_results.append(posts.iloc[k['corpus_id'], 0:].to_dict())
 
         return search_results
-
 
 
 class Model1_2(Model1_1):
@@ -101,13 +103,19 @@ class Model1_2(Model1_1):
     fast = 'sentence-transformers/all-MiniLM-L6-v2'
     best = 'sentence-transformers/all-mpnet-base-v2'
 
-    def __init__(self, model = fast) -> None:
+    def __init__(self, model=fast) -> None:
         self.model = SentenceTransformer(model)
         return None
 
     def query_llm(payload):
         data = json.dumps(payload)
-        response = requests.request("POST","https://api-inference.huggingface.co/models/deepset/tinyroberta-squad2", headers = {"Authorization": "Bearer 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"}, json = payload)
+        response = requests.request(
+            "POST",
+            "https://api-inference.huggingface.co/models/deepset/tinyroberta-squad2",
+            headers={
+                "Authorization": "Bearer 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"
+            },
+            json=payload)
         return response.json()
 
     def advice(self, user_query):
@@ -119,7 +127,7 @@ class Model1_2(Model1_1):
 
         # Search for k closest matches
         model = Model1_1()
-        search_results = model.search(query=user_query,results=3)
+        search_results = model.search(query=user_query, results=3)
 
         # Retrieve comments of these posts and put them into the context
 
@@ -127,41 +135,55 @@ class Model1_2(Model1_1):
         for post in search_results:
             ids.append(f't3_{post["id"]}')
 
-
-
         with open(absolute_path_comments, 'r') as file:
             data = pd.read_csv(file)
             relevant_comments = data[data['post_id'].isin(ids)]
             relevant_comments_text = relevant_comments['body']
             context = ' '.join(relevant_comments_text)
 
-
         if context != '':
-
 
             print('Initiating large language model...')
 
             openai.api_key = os.getenv("OPENAI_API_KEY")
             context_truncated = context[:5000]
             output = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input, then look through the Reddit posts and comments that are given to you, and propose any advice or solutions that are mentioned by other users. Only use the content provided to provide advice, and keep answers short, to a maximum of 50 words."},
-                {"role": "user",  "content": f"Here is my issue: {user_query}. Please extract a short piece of advice, maximum 50 words, from the comments provided"},
-                {"role": "assistant", "content": f"Here are the comments of posts that are similar to the user's issue:{context_truncated}"}
-            ]
-            )
+                model="gpt-3.5-turbo",
+                messages=[{
+                    "role":
+                    "system",
+                    "content":
+                    "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input, then look through the Reddit posts and comments that are given to you, and propose any advice or solutions that are mentioned by other users. Only use the content provided to provide advice, and keep answers short, to a maximum of 50 words."
+                }, {
+                    "role":
+                    "user",
+                    "content":
+                    f"Here is my issue: {user_query}. Please extract a short piece of advice, maximum 50 words, from the comments provided"
+                }, {
+                    "role":
+                    "assistant",
+                    "content":
+                    f"Here are the comments of posts that are similar to the user's issue:{context_truncated}"
+                }])
 
-
-            search_results.append({'advice': output.choices[0].message['content']})
+            search_results.append(
+                {'advice': output.choices[0].message['content']})
         else:
             output = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input. Since there are no comments from similar posts, you will say that there were not enough comments. Instead you will provide a comforting message and suggest ways to get help."},
-                {"role": "user",  "content": f"Here is my issue: {user_query}"},
-            ]
-            )
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                        "role":
+                        "system",
+                        "content":
+                        "You are a mental health assistant with vast psychological knowledge, and your role is to assess a problem or struggle that the user will input. Since there are no comments from similar posts, you will say that there were not enough comments. Instead you will provide a comforting message and suggest ways to get help."
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Here is my issue: {user_query}"
+                    },
+                ])
 
-            search_results.append({'advice': output.choices[0].message['content']})
+            search_results.append(
+                {'advice': output.choices[0].message['content']})
         return search_results

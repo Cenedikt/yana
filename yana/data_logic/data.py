@@ -3,8 +3,8 @@ import pandas_gbq
 import os
 from tqdm import tqdm
 
-from yana.ml_logic.api_reddit_call import ApiRedditCall
-from yana.ml_logic.preprocessor import Preprocessor
+from yana.data_logic.api_reddit_call import ApiRedditCall
+from yana.data_logic.preprocessor import Preprocessor
 
 from yana.params import *
 class Data :

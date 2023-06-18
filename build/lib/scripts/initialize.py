@@ -1,5 +1,5 @@
 from yana.ml_logic.models import Model1_1
-from yana.ml_logic.data import Data
+from yana.data_logic.data import Data
 
 '''
 creates all the importent files like csv and the emmbedet.pt file

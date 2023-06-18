@@ -1,4 +1,4 @@
-from yana.ml_logic.data import Data
+from yana.data_logic.data import Data
 '''
 scrapes all the post and comments and saves the on BigQuerry
 '''
