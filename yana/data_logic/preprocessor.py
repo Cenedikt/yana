@@ -16,7 +16,6 @@ class Preprocessor:
             data: takes a DataFrame as an input
         return : returns an DataFrame
         '''
-        print()
         print(f'start cleaning data.....')
         progress_bar = tqdm(total=data.shape[0], unit='iteration')
         for index, row in data.iterrows():
@@ -53,13 +52,3 @@ class Preprocessor:
         data.author = data.author.map(lambda x : str(x))
         print(f"✅ Data has been cleaned")
         return data
-
-if __name__ == '__main__' :
-    import pandas
-    path='/home/cenedikt/code/Cenedikt/yana/yana/data/depression_dataset_reddit_cleaned.csv'
-
-    df = pandas.read_csv(path)
-    prep = Preprocessor()
-    print(df)
-    df = prep.preprocessor_post(df)
-    print(df)

@@ -1,7 +1,6 @@
 import pandas as pd
 import pandas_gbq
 import os
-from colorama import Fore, Style
 from tqdm import tqdm
 
 from yana.data_logic.api_reddit_call import ApiRedditCall
@@ -25,7 +24,7 @@ class Data :
         print(f'start saving the Data.....')
         df = self.api_call.get_posts()
         df = self.prep.preprocessor_post(df)
-        #pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_posts}', project_id=self.gcp_project_id, if_exists='replace')
+        pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_posts}', project_id=self.gcp_project_id, if_exists='replace')
         print(f"✅ Data saved to bigquery")
 
     def load_posts(self)->pd.DataFrame:
@@ -65,6 +64,7 @@ class Data :
             progress_bar.update(1)
         df = self.prep.preprocessor_comments(df)
         progress_bar.close()
+        print(f"✅ Comments has been scrapped ")
         pandas_gbq.to_gbq(df, f'{self.gcp_project_id}.{self.dataset_id}.{self.table_comments}', project_id=self.gcp_project_id, if_exists='replace')
         print(f"✅ Data saved to bigquery")
 
@@ -81,6 +81,9 @@ class Data :
         return df
 
     def save_as_csv(self):
+        '''
+        creats csv from the data of the from bigQuerry
+        '''
         prefix = '.csv'
         current_directory = os.path.abspath(os.path.dirname(__file__))
         path_posts = os.path.join(current_directory,'..','data','posts')+prefix

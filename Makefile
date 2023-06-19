@@ -57,8 +57,8 @@ pypi:
 #-------------------------------------
 #      INIT DATA
 #-------------------------------------
-initilize :
-	@python initilize.py
+initialize :
+	@python scripts/initialize.py
 
-scrap :
-	@python scrap.py
+scraper :
+	@python scripts/scraper.py

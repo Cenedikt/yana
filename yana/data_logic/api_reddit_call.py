@@ -1,6 +1,5 @@
 import pandas as pd
 import praw
-from colorama import Fore, Style
 from tqdm import tqdm
 
 from yana.params import *
@@ -22,14 +21,12 @@ class ApiRedditCall :
         Return: returns a Df with the important information of the post
         '''
         progress_bar = tqdm(total=len(self.subreddits), unit='iteration')
-        #print(f'start scraping the data from reddit.....')
-        posts = {}
 
+        posts = {}
         index = 0
 
         for subreddit in self.subreddits:
             try:
-                #print(f'start scraping the data from reddit from the subreddit {subreddit}.....')
                 subreddit_request = self.reddit.subreddit(subreddit)
 
                 submissons = subreddit_request.top(limit=1000)
@@ -47,18 +44,14 @@ class ApiRedditCall :
                         post.permalink
                     ]
                     index +=1
-                    progress_bar.update(1)
-                #print(f"✅ Data has been scrapped from the subreddit {subreddit}")
+
             except:
-                progress_bar.update(1)
-                #print(f'subreddit not acessable')
-
+                print('Subbredit dose not exist or is private')
+            progress_bar.update(1)
         df = pd.DataFrame.from_dict(posts,orient='index' ,columns=columns)
-
-        #self.get_used_requests()
-
-        #print(f"✅ Data has been scrapped")
         progress_bar.close()
+        print(f"✅ Post has been scrapped")
+
         return df
 
     def get_commets(self, post_id: str) -> pd.DataFrame :
@@ -72,7 +65,6 @@ class ApiRedditCall :
         index = 0
         columns=['id','author','body','ups','post_id']
         try:
-            #print(f'start scraping commentsfrom Post {post_id}')
             post = self.reddit.submission(id=post_id)
             post.comments.replace_more(limit=10)
 
@@ -85,12 +77,10 @@ class ApiRedditCall :
                     comment.link_id
                     ]
                 index +=1
-            #print(f'✅ comments has been scraped from the post {post_id}')
         except:
             print(f'no comment for the post {post_id}')
         df = pd.DataFrame.from_dict(comments,orient='index' ,columns=columns)
 
-        #self.get_used_requests()
         return df
 
     def get_used_requests(self)->int:
