@@ -25,8 +25,6 @@ disclamer = '*Disclaimer: Our platform provides valuable insights and fosters co
 mode1_ifos = 'According to our Model, the following Reddit posts are similar to your query:'
 mode2_ifos = 'According to other Redditors, the following advice is considered the most suitable by our Model for your situation:'
 
-#htmmlstructure
-
 
 # Call st.set_page_config() as the first Streamlit command
 st.set_page_config(page_title='YANA', page_icon=yana_logo_path)
