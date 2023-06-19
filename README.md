@@ -114,7 +114,7 @@ uvicorn yana.api.api:app --reload
 
 Before building an image
 some initialize has to be done
-the csv and emmbeding.pt will be created localy
+the csv and emmbeding.pt will be created locally
 ```bash
 make initialize
 ```
